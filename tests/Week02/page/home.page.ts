@@ -26,8 +26,8 @@ export class HomePage {
         this.page = page;
         this.closePopupButton = page.locator("//div[@id='popmake-5700']//button[contains(@class, 'close')]");
         this.acceptCookiesButton = page.locator("//span[@id='cn-notice-buttons']");
-        this.searchInput = page.locator("//input[@placeholder='Search']");
-        this.searchButton = page.locator("//button[@type='submit']");
+        this.searchInput = page.locator("//div[@class='input-row flex align-items-center ']//input[@placeholder='Type here...'][not(contains(@class, 'mobile-header-wrapper'))]");
+        this.searchButton = page.locator("//div[@class='input-row flex align-items-center ']//button[@type='submit'][not(contains(@class, 'mobile-header-wrapper'))]");
         this.phoneNumber = page.locator("//span[contains(text(), '(+1800) 000 8808')]");
         this.address = page.locator("//span[contains(text(), '1730 S. Amphlett Blvd')]");
         this.loginSignupLink = page.locator("//div[normalize-space(@class)='header-top-wrapper']//a[@href='https://demo.testarchitect.com/my-account/'][not(contains(@class, 'mobile-header-wrapper'))]");
@@ -72,7 +72,6 @@ export class HomePage {
         const instagramVisible = await this.instagramIcon.isVisible();
         const twitterVisible = await this.twitterIcon.isVisible();
         const facebookVisible = await this.facebookIcon.isVisible();
-
         return pinterestVisible && instagramVisible && twitterVisible && facebookVisible;
     }
 
