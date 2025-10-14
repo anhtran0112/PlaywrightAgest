@@ -25,57 +25,46 @@ test('TC_01: Verify Homepage Elements Are Visible', async ({ page }) => {
    const homePage = new HomePage(page);
    const homeVerify = new HomeVerify(homePage);
 
-   await homePage.navigateTo('https://demo.testarchitect.com/');
-   await homePage.closePopup();
-   await homePage.acceptCookies();
+   await test.step('1. Navigate to homepage', async () => {
+      await homePage.navigateToHomepage();
+   });
 
-   await expect(homePage.getHomeMenu()).toBeVisible();
-   await expect(homePage.getPhoneNumber()).toBeVisible();
-   await expect(homePage.getAddress()).toBeVisible();
-   await expect(homePage.getAboutUsMenu()).toBeVisible();
-   await expect(homePage.getShopMenu()).toBeVisible();
-   await expect(homePage.getOffersMenu()).toBeVisible();
-   await expect(homePage.getBlogMenu()).toBeVisible();
-   await expect(homePage.getContactUsMenu()).toBeVisible();
-   await expect(homePage.getLoginSignupLink()).toBeVisible();
-   await expect(homePage.getFacebookIcon()).toBeVisible();
-   await expect(homePage.getInstagramIcon()).toBeVisible();
-   await expect(homePage.getPinterestIcon()).toBeVisible();
-   await expect(homePage.getTwitterIcon()).toBeVisible();
+   await test.step('2. Close popup notifications', async () => {
+      await homePage.closePopup();
+   });
 
-   // Click vào category About us
-   await homePage.clickAboutUsMenu();
-   // Verify navigation
-   await homeVerify.verifyLinkNavigation('About us', 'https://demo.testarchitect.com/about-us/');
+   await test.step('3. Accept cookie notice', async () => {
+      await homePage.acceptCookies();
+   });
 
-   // Click vào category Home
-   await homePage.clickHomeMenu();
-   // Verify navigation
-   await homeVerify.verifyLinkNavigation('Home', 'https://demo.testarchitect.com/');
+   await test.step('4. Verify header section elements', async () => {
+      await expect(homePage.getPhoneNumber()).toBeVisible();
+      await expect(homePage.getAddress()).toBeVisible();
+   });
 
-   // Click vào category Shop
-   await homePage.clickShopMenu();
-   // Verify navigation
-   await homeVerify.verifyLinkNavigation('Shop', 'https://demo.testarchitect.com/shop/');
+   await test.step('5. Verify top navigation elements', async () => {
+      // All mentioned elements should be visible
+      await expect(homePage.getLoginSignupLink()).toBeVisible();
+      await expect(homePage.getFacebookIcon()).toBeVisible();
+      await expect(homePage.getInstagramIcon()).toBeVisible();
+      await expect(homePage.getPinterestIcon()).toBeVisible();
+      await expect(homePage.getTwitterIcon()).toBeVisible();
+   });
 
-   // Click vào category Offer
-   await homePage.clickOffersMenu();
-   // Verify navigation
-   await homeVerify.verifyLinkNavigation('Offer', 'https://demo.testarchitect.com/product-category/electronic-components-supplies/');
-
-   // Click vào category Blog
-   await homePage.clickBlogMenu();
-   // Verify navigation
-   await homeVerify.verifyLinkNavigation('Blog', 'https://demo.testarchitect.com/blog/');
-
-   // Click vào category Contact
-   await homePage.clickContactUsMenu();
-   // Verify navigation
-   await homeVerify.verifyLinkNavigation('Contact', 'https://demo.testarchitect.com/contact/');
-
-   // Click vào category My account
-   await homePage.clickLoginSignupLink();
-   // Verify navigation
-   await homeVerify.verifyLinkNavigation('My account', 'https://demo.testarchitect.com/my-account/');
-
+   await test.step('6. Verify main navigation menu elements', async () => {
+      await homePage.clickAboutUsMenu();
+      await homeVerify.verifyLinkNavigation('About us', 'https://demo.testarchitect.com/about-us/');
+      await homePage.clickHomeMenu();
+      await homeVerify.verifyLinkNavigation('Home', 'https://demo.testarchitect.com/');
+      await homePage.clickShopMenu();
+      await homeVerify.verifyLinkNavigation('Shop', 'https://demo.testarchitect.com/shop/');
+      await homePage.clickOffersMenu();
+      await homeVerify.verifyLinkNavigation('Offer', 'https://demo.testarchitect.com/product-category/electronic-components-supplies/');
+      await homePage.clickBlogMenu();
+      await homeVerify.verifyLinkNavigation('Blog', 'https://demo.testarchitect.com/blog/');
+      await homePage.clickContactUsMenu();
+      await homeVerify.verifyLinkNavigation('Contact', 'https://demo.testarchitect.com/contact/');
+      await homePage.clickLoginSignupLink();
+      await homeVerify.verifyLinkNavigation('My account', 'https://demo.testarchitect.com/my-account/');
+   });
 });

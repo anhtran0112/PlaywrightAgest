@@ -115,4 +115,13 @@ export class HomePage extends BasePage {
     public getAllCategoryItems(): Locator {
         return this.allCategoryItems;
     }
+
+    public async navigateToHomepage() {
+        await this.page.goto('/');
+    }
+
+    public async navigateToLogin() {
+        await this.page.goto('/my-account/');
+    }
+
 }
