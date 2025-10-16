@@ -22,23 +22,24 @@ export class HomePage extends BasePage {
         super(page);
         // Khởi tạo
         // All Departments Menu Links - chỉ có trên HomePage
-        this.automobilesLink = this.page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/automobiles-motorcycles/']");
-        this.carElectronicsLink = this.page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/car-electronics/']");
-        this.mobilePhoneAccessoriesLink = this.page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/mobile-phone-accessories/']");
-        this.computerOfficeLink = this.page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/computer-office/']");
-        this.tabletAccessoriesLink = this.page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/tablet-accessories/']");
-        this.consumerElectronicsLink = this.page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/consumer-electronics/']");
-        this.electronicComponentsLink = this.page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/electronic-components-supplies/']");
-        this.phonesTelecomLink = this.page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/phones-telecommunications/']");
-        this.watchesLink = this.page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/watches/']");
+        this.automobilesLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/automobiles-motorcycles/']");
+        this.carElectronicsLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/car-electronics/']");
+        this.mobilePhoneAccessoriesLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/mobile-phone-accessories/']");
+        this.computerOfficeLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/computer-office/']");
+        this.tabletAccessoriesLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/tablet-accessories/']");
+        this.consumerElectronicsLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/consumer-electronics/']");
+        this.electronicComponentsLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/electronic-components-supplies/']");
+        this.phonesTelecomLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/phones-telecommunications/']");
+        this.watchesLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/watches/']");
         // All Category Items
-        this.allCategoryItems = this.page.locator("//select[@id='product_cat-127']");
+        this.allCategoryItems = page.locator("//select[@id='product_cat-127']");
     }
 
     // ==================== HOME PAGE SPECIFIC METHODS ====================
 
     // Category Navigation Methods
     public async clickAutomobilesLink(): Promise<void> {
+        await this.automobilesLink.waitFor({ timeout: 10000 });
         await this.automobilesLink.click();
     }
 

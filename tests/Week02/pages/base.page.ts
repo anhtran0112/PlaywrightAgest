@@ -27,27 +27,27 @@ export class BasePage {
         this.page = page;
 
         // Header Elements
-        this.closePopupButton = this.page.locator("//div[@id='popmake-5700']//button[contains(@class, 'close')]");
-        this.acceptCookiesButton = this.page.locator("//span[@id='cn-notice-buttons']");
-        this.searchInput = this.page.locator("//div[@class='input-row flex align-items-center']//input[@placeholder='Type here...'][not(contains(@class, 'mobile-header-wrapper'))]");
-        this.searchButton = this.page.locator("//div[@class='input-row flex align-items-center']//button[@type='submit'][not(contains(@class, 'mobile-header-wrapper'))]");
-        this.phoneNumber = this.page.locator("//span[contains(text(), '(+1800) 000 8808')]");
-        this.address = this.page.locator("//span[contains(text(), '1730 S. Amphlett Blvd')]");
-        this.loginSignupLink = this.page.locator("//div[normalize-space(@class)='header-top-wrapper']//a[@href='https://demo.testarchitect.com/my-account/'][not(contains(@class, 'mobile-header-wrapper'))]");
+        this.closePopupButton =page.locator("//div[@id='popmake-5700']//button[contains(@class, 'close')]");
+        this.acceptCookiesButton = page.locator("//span[@id='cn-notice-buttons']");
+        this.searchInput = page.locator("//div[@class='input-row flex align-items-center']//input[@placeholder='Type here...'][not(contains(@class, 'mobile-header-wrapper'))]");
+        this.searchButton = page.locator("//div[@class='input-row flex align-items-center']//button[@type='submit'][not(contains(@class, 'mobile-header-wrapper'))]");
+        this.phoneNumber = page.locator("//span[contains(text(), '(+1800) 000 8808')]");
+        this.address = page.locator("//span[contains(text(), '1730 S. Amphlett Blvd')]");
+        this.loginSignupLink = page.locator("//div[normalize-space(@class)='header-top-wrapper']//a[@href='https://demo.testarchitect.com/my-account/'][not(contains(@class, 'mobile-header-wrapper'))]");
 
         // Social Media Icons
-        this.pinterestIcon = this.page.locator("//div[contains(@class, 'header-socials') and contains(@class, 'mob-justify-content')]//a[@data-tooltip='Pinterest'][not(contains(@class, 'mobile-header-wrapper'))]");
-        this.instagramIcon = this.page.locator("//div[contains(@class, 'header-socials') and contains(@class, 'mob-justify-content')]//a[@data-tooltip='Instagram'][not(contains(@class, 'mobile-header-wrapper'))]");
-        this.twitterIcon = this.page.locator("//div[contains(@class, 'header-socials') and contains(@class, 'mob-justify-content')]//a[@data-tooltip='Twitter'][not(contains(@class, 'mobile-header-wrapper'))]");
-        this.facebookIcon = this.page.locator("//div[contains(@class, 'header-socials') and contains(@class, 'mob-justify-content')]//a[@data-tooltip='Facebook'][not(contains(@class, 'mobile-header-wrapper'))]");
+        this.pinterestIcon = page.locator("//div[contains(@class, 'header-socials') and contains(@class, 'mob-justify-content')]//a[@data-tooltip='Pinterest'][not(contains(@class, 'mobile-header-wrapper'))]");
+        this.instagramIcon = page.locator("//div[contains(@class, 'header-socials') and contains(@class, 'mob-justify-content')]//a[@data-tooltip='Instagram'][not(contains(@class, 'mobile-header-wrapper'))]");
+        this.twitterIcon = page.locator("//div[contains(@class, 'header-socials') and contains(@class, 'mob-justify-content')]//a[@data-tooltip='Twitter'][not(contains(@class, 'mobile-header-wrapper'))]");
+        this.facebookIcon = page.locator("//div[contains(@class, 'header-socials') and contains(@class, 'mob-justify-content')]//a[@data-tooltip='Facebook'][not(contains(@class, 'mobile-header-wrapper'))]");
 
         // Main Navigation Menu
-        this.homeMenu = this.page.locator("//ul[@id='menu-main-menu-1']//li[contains(normalize-space(), 'Home')]");
-        this.aboutUsMenu = this.page.locator("//ul[@id='menu-main-menu-1']//li[contains(normalize-space(), 'About Us')]");
-        this.shopMenu = this.page.locator("//ul[@id='menu-main-menu-1']//li[contains(normalize-space(), 'Shop')]");
-        this.offersMenu = this.page.locator("//ul[@id='menu-main-menu-1']//li//a[contains(text(), 'Offers')]");
-        this.blogMenu = this.page.locator("//ul[@id='menu-main-menu-1']//li//a[contains(text(), 'Blog')]");
-        this.contactUsMenu = this.page.locator("//ul[@id='menu-main-menu-1']//li//a[contains(text(), 'Contact Us')]");
+        this.homeMenu = page.locator("//ul[@id='menu-main-menu-1']//li[contains(normalize-space(), 'Home')]");
+        this.aboutUsMenu = page.locator("//ul[@id='menu-main-menu-1']//li[contains(normalize-space(), 'About Us')]");
+        this.shopMenu = page.locator("//ul[@id='menu-main-menu-1']//li[contains(normalize-space(), 'Shop')]");
+        this.offersMenu = page.locator("//ul[@id='menu-main-menu-1']//li//a[contains(text(), 'Offers')]");
+        this.blogMenu = page.locator("//ul[@id='menu-main-menu-1']//li//a[contains(text(), 'Blog')]");
+        this.contactUsMenu = page.locator("//ul[@id='menu-main-menu-1']//li//a[contains(text(), 'Contact Us')]");
     }
 
     // ==================== COMMON METHODS ====================
@@ -94,30 +94,37 @@ export class BasePage {
 
     // Navigation Menu Clicks
     public async clickHomeMenu(): Promise<void> {
+        await this.homeMenu.waitFor({ timeout: 5000 });
         await this.homeMenu.click();
     }
 
     public async clickAboutUsMenu(): Promise<void> {
+        await this.aboutUsMenu.waitFor({ timeout: 5000 });
         await this.aboutUsMenu.click();
     }
 
     public async clickShopMenu(): Promise<void> {
+        await this.shopMenu.waitFor({ timeout: 5000 });
         await this.shopMenu.click();
     }
 
     public async clickOffersMenu(): Promise<void> {
+        await this.offersMenu.waitFor({ timeout: 5000 });
         await this.offersMenu.click();
     }
 
     public async clickBlogMenu(): Promise<void> {
+        await this.blogMenu.waitFor({ timeout: 5000 });
         await this.blogMenu.click();
     }
 
     public async clickContactUsMenu(): Promise<void> {
+        await this.contactUsMenu.waitFor({ timeout: 5000 });
         await this.contactUsMenu.click();
     }
 
     public async clickLoginSignupLink(): Promise<void> {
+        await this.loginSignupLink.waitFor({ timeout: 5000 });
         await this.loginSignupLink.click();
     }
 
@@ -207,10 +214,6 @@ export class BasePage {
     }
 
     // ==================== UTILITY METHODS ====================
-
-    public async waitForPageLoad(): Promise<void> {
-        await this.page.waitForLoadState('networkidle');
-    }
 
     public async takeScreenshot(name: string): Promise<void> {
         await this.page.screenshot({ path: `screenshots/${name}-${Date.now()}.png` });
