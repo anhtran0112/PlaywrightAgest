@@ -15,6 +15,7 @@ export class HomePage extends BasePage {
     private phonesTelecomLink: Locator;
     private watchesLink: Locator;
     private allCategoryItems: Locator;
+    private allDepartmentsItems: Locator;
 
     // Tham số truyền vào là một instance của Playwright Page
     constructor(page: Page) {
@@ -33,10 +34,14 @@ export class HomePage extends BasePage {
         this.watchesLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/watches/']");
         // All Category Items
         this.allCategoryItems = page.locator("//select[@id='product_cat-127']");
+        this.allDepartmentsItems = page.locator('text=All departments').first();
     }
 
     // ==================== HOME PAGE SPECIFIC METHODS ====================
-
+    // milliseconds
+    public async waitForTimeout(ms: number): Promise<void> {
+        await this.page.waitForTimeout(ms);
+    }
     // Category Navigation Methods
     public async clickAutomobilesLink(): Promise<void> {
         await this.automobilesLink.waitFor({ timeout: 10000 });
@@ -75,7 +80,30 @@ export class HomePage extends BasePage {
         await this.watchesLink.click();
     }
 
+    public async hoverMouseAllCategoryItems(maxRetries: number = 3): Promise<void> {
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            await this.allDepartmentsItems.hover();
+            await this.page.waitForTimeout(300);
+            if (await this.isHoverEffectVisible()) {
+                return; // Success
+            }
+            if (attempt < maxRetries) {
+                await this.page.waitForTimeout(500);
+            }
+        }
+    }
+
+    private async isHoverEffectVisible(): Promise<boolean> {
+        const subMenu = this.page.locator('.sub-menu, .dropdown');
+        return await subMenu.isVisible();
+    }
+
     // ==================== HOME PAGE SPECIFIC GETTERS ====================
+
+    // Thêm method getPage()
+    public getPage(): Page {
+        return this.page;
+    }
 
     public getAutomobilesLink(): Locator {
         return this.automobilesLink;

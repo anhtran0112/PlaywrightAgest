@@ -27,10 +27,10 @@ export class BasePage {
         this.page = page;
 
         // Header Elements
-        this.closePopupButton =page.locator("//div[@id='popmake-5700']//button[contains(@class, 'close')]");
+        this.closePopupButton = page.locator("//div[@id='popmake-5700']//button[contains(@class, 'close')]");
         this.acceptCookiesButton = page.locator("//span[@id='cn-notice-buttons']");
-        this.searchInput = page.locator("//div[@class='input-row flex align-items-center']//input[@placeholder='Type here...'][not(contains(@class, 'mobile-header-wrapper'))]");
-        this.searchButton = page.locator("//div[@class='input-row flex align-items-center']//button[@type='submit'][not(contains(@class, 'mobile-header-wrapper'))]");
+        this.searchInput = page.locator("//div[@class='input-row flex align-items-center ']//input[@placeholder='Type here...'][not(contains(@class, 'mobile-header-wrapper'))]");
+        this.searchButton = page.locator("//div[@class='input-row flex align-items-center ']//button[@type='submit'][not(contains(@class, 'mobile-header-wrapper'))]");
         this.phoneNumber = page.locator("//span[contains(text(), '(+1800) 000 8808')]");
         this.address = page.locator("//span[contains(text(), '1730 S. Amphlett Blvd')]");
         this.loginSignupLink = page.locator("//div[normalize-space(@class)='header-top-wrapper']//a[@href='https://demo.testarchitect.com/my-account/'][not(contains(@class, 'mobile-header-wrapper'))]");
@@ -82,10 +82,17 @@ export class BasePage {
         await this.acceptCookiesButton.click();
     }
 
+    public async selectCategories(category: 'All categories' | 'Accessory Bundles'|'Acoustic Components'|'Air-conditioning Installation'): Promise<void> {
+        const categoryDropdown = this.page.locator('//select[contains(@id, "product_cat-")]');
+        await categoryDropdown.selectOption({ label: category });
+    }
+
     // Search Functionality
     public async searchForProduct(productName: string): Promise<void> {
-        await this.searchInput.fill(productName, { timeout: 15000 });
+        await this.searchInput.fill(productName, { timeout: 1000 });
         await this.searchButton.click();
+        // Chờ kết quả search load xong
+        await this.page.waitForLoadState('networkidle');
     }
 
     public async clearSearch(): Promise<void> {
@@ -221,5 +228,19 @@ export class BasePage {
 
     public async getPageTitle(): Promise<string> {
         return await this.page.title();
+    }
+
+
+    public async countProductsAfterSearch(productName: string): Promise<number> {
+        // Locator động cho các sản phẩm theo tên
+        const productLocator = this.page.locator(`//h2[@class='product-title']//a[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${productName}')]`);
+        // Đếm số lượng sản phẩm và trả về
+        const productCount = await productLocator.count();
+        if (productCount > 0) {
+            console.log(`Found ${productCount} "${productName}" product(s) on the page`);
+        } else {
+            console.log(`No "${productName}" products found on the page`);
+        }
+        return productCount;
     }
 }
