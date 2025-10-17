@@ -20,13 +20,13 @@ test('TC_03: Verify Main Menu Categories Navigate Correctly', async ({ page }) =
     const homePage = new HomePage(page);
     const homeVerify = new HomeVerify(homePage);
 
-    await test.step('Navigate to homepage and handle initial setup', async () => {
+    await test.step('1. Navigate to homepage and handle initial setup', async () => {
         await homePage.navigateToHomepage();
         await homePage.closePopup();
         await homePage.acceptCookies();
     });
 
-    await test.step('Verify all menu categories navigate correctly', async () => {
+    await test.step('2. Verify all menu categories navigate correctly', async () => {
         await homeVerify.verifyAllMenuCategoriesNavigateCorrectly();
     });
 

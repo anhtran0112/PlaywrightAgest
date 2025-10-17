@@ -205,6 +205,7 @@ export class HomeVerify {
                 method: 'clickElectronicComponentsLink',
                 expectedUrl: 'https://demo.testarchitect.com/product-category/electronic-components-supplies/'
             },
+            
             {
                 name: 'Phones & Telecommunications',
                 method: 'clickPhonesTelecomLink',
@@ -232,15 +233,10 @@ export class HomeVerify {
         // Click vào link category
         await this.homePage[category.method]();
         await this.homePage.getPage().waitForLoadState('load');
-        await this.homePage.getPage().waitForLoadState('networkidle');
-        //Tạo Locator dựa trên văn bản động
-        const dynamicTextLocator = this.homePage.getPage().getByText(category.name, { exact: false });
+        //await this.homePage.getPage().waitForLoadState('networkidle');
+        const dynamicTextLocator = this.homePage.getPage().getByRole('heading', { name: category.name});
         //Chờ Locator text xuất hiện 
         await dynamicTextLocator.waitFor({ state: 'visible', timeout: 30000 });
         await this.verifyLinkNavigation(category.name, category.expectedUrl);
-        await this.homePage.navigateToHomepage();
-        // Chờ quay lại home page
-        await this.homePage.getPage().waitForLoadState('load');
-        await this.homePage.getPage().waitForLoadState('networkidle');
     }
 }

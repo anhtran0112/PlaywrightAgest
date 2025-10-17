@@ -63,6 +63,7 @@ export class HomePage extends BasePage {
         // All Category Items
         this.allCategoryItems = page.locator("//select[@id='product_cat-127']");
         this.allDepartmentsItems = page.locator('text=All departments').first();
+
     }
 
     // ==================== HOME PAGE SPECIFIC METHODS ====================
