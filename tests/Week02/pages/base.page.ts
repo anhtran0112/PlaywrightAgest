@@ -51,7 +51,10 @@ export class BasePage {
     }
 
     // ==================== COMMON METHODS ====================
-
+    // milliseconds
+    public async waitForTimeout(ms: number): Promise<void> {
+        await this.page.waitForTimeout(ms);
+    }
     // Navigation
     public async navigateTo(url: string): Promise<void> {
         await this.page.goto(url);
@@ -82,7 +85,7 @@ export class BasePage {
         await this.acceptCookiesButton.click();
     }
 
-    public async selectCategories(category: 'All categories' | 'Accessory Bundles'|'Acoustic Components'|'Air-conditioning Installation'): Promise<void> {
+    public async selectCategories(category: 'All categories' | 'Accessory Bundles' | 'Acoustic Components' | 'Air-conditioning Installation'): Promise<void> {
         const categoryDropdown = this.page.locator('//select[contains(@id, "product_cat-")]');
         await categoryDropdown.selectOption({ label: category });
     }
