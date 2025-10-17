@@ -21,17 +21,45 @@ export class HomePage extends BasePage {
     constructor(page: Page) {
         // Gọi constructor của class cha (Base page)
         super(page);
-        // Khởi tạo
         // All Departments Menu Links - chỉ có trên HomePage
-        this.automobilesLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/automobiles-motorcycles/']");
-        this.carElectronicsLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/car-electronics/']");
-        this.mobilePhoneAccessoriesLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/mobile-phone-accessories/']");
-        this.computerOfficeLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/computer-office/']");
-        this.tabletAccessoriesLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/tablet-accessories/']");
-        this.consumerElectronicsLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/consumer-electronics/']");
-        this.electronicComponentsLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/electronic-components-supplies/']");
-        this.phonesTelecomLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/phones-telecommunications/']");
-        this.watchesLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/watches/']");
+        const allLinksInMenu = page.locator('#menu-all-departments-1');
+        //this.automobilesLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/automobiles-motorcycles/']");
+        this.automobilesLink = allLinksInMenu.locator('a', { hasText: /Automobiles & Motorcycles/i })
+            .filter({ hasNot: page.locator('div.mobile-header-wrapper') })
+            .first();
+
+        this.carElectronicsLink = allLinksInMenu.locator('a', { hasText: /Car Electronics/i })
+            .filter({ hasNot: page.locator('div.mobile-header-wrapper') })
+            .first();
+
+        this.mobilePhoneAccessoriesLink = allLinksInMenu.locator('a', { hasText: /Mobile Phone Accessories/i })
+            .filter({ hasNot: page.locator('div.mobile-header-wrapper') })
+            .first();
+
+        this.computerOfficeLink = allLinksInMenu.locator('a', { hasText: /Computer & Office/i })
+            .filter({ hasNot: page.locator('div.mobile-header-wrapper') })
+            .first();
+
+        this.tabletAccessoriesLink = allLinksInMenu.locator('a', { hasText: /Tablet Accessories/i })
+            .filter({ hasNot: page.locator('div.mobile-header-wrapper') })
+            .first();
+
+        this.consumerElectronicsLink = allLinksInMenu.locator('a', { hasText: /Consumer Electronics/i })
+            .filter({ hasNot: page.locator('div.mobile-header-wrapper') })
+            .first();
+
+        this.electronicComponentsLink = allLinksInMenu.locator('a', { hasText: /Electronic Components & Supplies/i })
+            .filter({ hasNot: page.locator('div.mobile-header-wrapper') })
+            .first();
+
+        this.phonesTelecomLink = allLinksInMenu.locator('a', { hasText: /Phones & Telecommunications/i })
+            .filter({ hasNot: page.locator('div.mobile-header-wrapper') })
+            .first();
+
+        this.watchesLink = allLinksInMenu.locator('a', { hasText: /Watches/i })
+            .filter({ hasNot: page.locator('div.mobile-header-wrapper') })
+            .first();
+
         // All Category Items
         this.allCategoryItems = page.locator("//select[@id='product_cat-127']");
         this.allDepartmentsItems = page.locator('text=All departments').first();
@@ -44,43 +72,51 @@ export class HomePage extends BasePage {
     }
     // Category Navigation Methods
     public async clickAutomobilesLink(): Promise<void> {
-        await this.automobilesLink.waitFor({ timeout: 10000 });
+        await this.automobilesLink.waitFor({ timeout: 30000 });
         await this.automobilesLink.click();
     }
 
     public async clickCarElectronicsLink(): Promise<void> {
+        await this.carElectronicsLink.waitFor({ timeout: 30000 });
         await this.carElectronicsLink.click();
     }
 
     public async clickMobilePhoneAccessoriesLink(): Promise<void> {
+        await this.mobilePhoneAccessoriesLink.waitFor({ timeout: 30000 });
         await this.mobilePhoneAccessoriesLink.click();
     }
 
     public async clickComputerOfficeLink(): Promise<void> {
+        await this.computerOfficeLink.waitFor({ timeout: 30000 });
         await this.computerOfficeLink.click();
     }
 
     public async clickTabletAccessoriesLink(): Promise<void> {
+        await this.tabletAccessoriesLink.waitFor({ timeout: 30000 });
         await this.tabletAccessoriesLink.click();
     }
 
     public async clickConsumerElectronicsLink(): Promise<void> {
+        await this.consumerElectronicsLink.waitFor({ timeout: 30000 });
         await this.consumerElectronicsLink.click();
     }
 
     public async clickElectronicComponentsLink(): Promise<void> {
+        await this.electronicComponentsLink.waitFor({ timeout: 30000 });
         await this.electronicComponentsLink.click();
     }
 
     public async clickPhonesTelecomLink(): Promise<void> {
+        await this.phonesTelecomLink.waitFor({ timeout: 30000 });
         await this.phonesTelecomLink.click();
     }
 
     public async clickWatchesLink(): Promise<void> {
+        await this.watchesLink.waitFor({ timeout: 30000 });
         await this.watchesLink.click();
     }
 
-    public async hoverMouseAllCategoryItems(maxRetries: number = 3): Promise<void> {
+    /*public async hoverMouseAllCategoryItems(maxRetries: number = 3): Promise<void> {
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
             await this.allDepartmentsItems.hover();
             await this.page.waitForTimeout(300);
@@ -96,6 +132,11 @@ export class HomePage extends BasePage {
     private async isHoverEffectVisible(): Promise<boolean> {
         const subMenu = this.page.locator('.sub-menu, .dropdown');
         return await subMenu.isVisible();
+    }*/
+
+    public async hoverMouseAllCategoryItems(): Promise<void> {
+        await this.allDepartmentsItems.hover();
+        await this.page.waitForTimeout(300);
     }
 
     // ==================== HOME PAGE SPECIFIC GETTERS ====================

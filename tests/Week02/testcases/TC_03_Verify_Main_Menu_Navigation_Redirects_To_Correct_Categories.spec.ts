@@ -21,7 +21,7 @@ test('TC_03: Verify Main Menu Categories Navigate Correctly', async ({ page }) =
     const homeVerify = new HomeVerify(homePage);
 
     await test.step('Navigate to homepage and handle initial setup', async () => {
-        await homePage.navigateTo('https://demo.testarchitect.com/');
+        await homePage.navigateToHomepage();
         await homePage.closePopup();
         await homePage.acceptCookies();
     });
@@ -29,4 +29,5 @@ test('TC_03: Verify Main Menu Categories Navigate Correctly', async ({ page }) =
     await test.step('Verify all menu categories navigate correctly', async () => {
         await homeVerify.verifyAllMenuCategoriesNavigateCorrectly();
     });
+
 });

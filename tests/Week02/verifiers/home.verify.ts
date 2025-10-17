@@ -3,7 +3,7 @@ import { BasePage } from '../pages/base.page';
 import { expect } from '@playwright/test';
 //import { Locator } from '@playwright/test';
 
-type CategoryMethod = 
+type CategoryMethod =
     | 'clickAutomobilesLink'
     | 'clickCarElectronicsLink'
     | 'clickComputerOfficeLink'
@@ -58,10 +58,6 @@ export class HomeVerify {
 
     // VERIFICATION METHODS
 
-    public async verifyLinkNavigation(categoryName: string, expectedUrl: string): Promise<void> {
-        const actualUrl = this.homePage.getPage().url();
-        expect(actualUrl).toBe(expectedUrl);
-    }
 
     // Kiểu trả về - Promise chứa object theo interface NavigationResult
     /*
@@ -226,15 +222,25 @@ export class HomeVerify {
         }
     }
 
+    public async verifyLinkNavigation(categoryName: string, expectedUrl: string): Promise<void> {
+        const actualUrl = this.homePage.getPage().url();
+        expect(actualUrl).toBe(expectedUrl);
+    }
+
     private async testCategoryNavigation(category: CategoryTest): Promise<void> {
-        //
         await this.homePage.hoverMouseAllCategoryItems();
-        // Click the category link with proper typing
+        // Click vào link category
         await this.homePage[category.method]();
-        await this.homePage.waitForTimeout(5000);
-        // Verify navigation using existing method
+        await this.homePage.getPage().waitForLoadState('load');
+        await this.homePage.getPage().waitForLoadState('networkidle');
+        //Tạo Locator dựa trên văn bản động
+        const dynamicTextLocator = this.homePage.getPage().getByText(category.name, { exact: false });
+        //Chờ Locator text xuất hiện 
+        await dynamicTextLocator.waitFor({ state: 'visible', timeout: 30000 });
         await this.verifyLinkNavigation(category.name, category.expectedUrl);
-        // Navigate back to homepage
-        // await this.homePage.navigateTo('https://demo.testarchitect.com/');
+        await this.homePage.navigateToHomepage();
+        // Chờ quay lại home page
+        await this.homePage.getPage().waitForLoadState('load');
+        await this.homePage.getPage().waitForLoadState('networkidle');
     }
 }

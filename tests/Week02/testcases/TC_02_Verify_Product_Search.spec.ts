@@ -18,7 +18,7 @@ test('TC_02: Verify Product Search Functionality Works', async ({ page }) => {
     const homeVerify = new HomeVerify(homePage);
 
     await test.step('Step 1: Navigate to application homepage', async () => {
-        await homePage.navigateTo('https://demo.testarchitect.com/');
+        await homePage.navigateToHomepage();
     });
 
     await test.step('Step 2: Close any popup notifications if present', async () => {
