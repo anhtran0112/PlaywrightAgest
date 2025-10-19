@@ -27,27 +27,45 @@ export class BasePage {
         this.page = page;
 
         // Header Elements
-        this.closePopupButton = page.locator("//div[@id='popmake-5700']//button[contains(@class, 'close')]");
-        this.acceptCookiesButton = page.locator("//span[@id='cn-notice-buttons']");
-        this.searchInput = page.locator("//div[@class='input-row flex align-items-center ']//input[@placeholder='Type here...'][not(contains(@class, 'mobile-header-wrapper'))]");
-        this.searchButton = page.locator("//div[@class='input-row flex align-items-center ']//button[@type='submit'][not(contains(@class, 'mobile-header-wrapper'))]");
-        this.phoneNumber = page.locator("//span[contains(text(), '(+1800) 000 8808')]");
-        this.address = page.locator("//span[contains(text(), '1730 S. Amphlett Blvd')]");
-        this.loginSignupLink = page.locator("//div[normalize-space(@class)='header-top-wrapper']//a[@href='https://demo.testarchitect.com/my-account/'][not(contains(@class, 'mobile-header-wrapper'))]");
+        //this.closePopupButton = page.locator("//div[@id='popmake-5700']//button[contains(@class, 'close')]");
+        this.closePopupButton = page.locator('#popmake-5700').getByRole('button', { name: 'Close' });
+        //this.acceptCookiesButton = page.locator("//span[@id='cn-notice-buttons']");
+        this.acceptCookiesButton = page.locator('#cn-notice-buttons').getByText('Ok');
+        //this.searchInput = page.locator("//div[@class='input-row flex align-items-center ']//input[@placeholder='Type here...'][not(contains(@class, 'mobile-header-wrapper'))]");
+        this.searchInput = page.locator('div.input-row.flex.align-items-center').getByPlaceholder('Type here...')
+            .filter({ hasNot: page.locator('.mobile-header-wrapper') }).first();
+        //this.searchButton = page.locator("//div[@class='input-row flex align-items-center ']//button[@type='submit'][not(contains(@class, 'mobile-header-wrapper'))]");
+        this.searchButton = page.locator('div.input-row.flex.align-items-center').getByRole('button', { name: 'Search' })
+            .filter({ hasNot: page.locator('.mobile-header-wrapper') }).first();
+        //this.phoneNumber = page.locator("//span[contains(text(), '(+1800) 000 8808')]");
+        //this.phoneNumber = page.getByText('(+1800) 000 8808');
+        this.phoneNumber = page.locator('span').filter({ hasText: '(+1800) 000 8808' });
+        //this.address = page.locator("//span[contains(text(), '1730 S. Amphlett Blvd')]");
+        this.address = page.locator('span').filter({ hasText: '1730 S. Amphlett Blvd' });
+        //this.loginSignupLink = page.locator("//div[normalize-space(@class)='header-top-wrapper']//a[@href='https://demo.testarchitect.com/my-account/'][not(contains(@class, 'mobile-header-wrapper'))]");
+        this.loginSignupLink = page.locator('div.header-top-wrapper a[href="https://demo.testarchitect.com/my-account/"]')
+            .getByText(/Log in|Sign up/i)
+            .first();
 
         // Social Media Icons
-        this.pinterestIcon = page.locator("//div[contains(@class, 'header-socials') and contains(@class, 'mob-justify-content')]//a[@data-tooltip='Pinterest'][not(contains(@class, 'mobile-header-wrapper'))]");
-        this.instagramIcon = page.locator("//div[contains(@class, 'header-socials') and contains(@class, 'mob-justify-content')]//a[@data-tooltip='Instagram'][not(contains(@class, 'mobile-header-wrapper'))]");
-        this.twitterIcon = page.locator("//div[contains(@class, 'header-socials') and contains(@class, 'mob-justify-content')]//a[@data-tooltip='Twitter'][not(contains(@class, 'mobile-header-wrapper'))]");
-        this.facebookIcon = page.locator("//div[contains(@class, 'header-socials') and contains(@class, 'mob-justify-content')]//a[@data-tooltip='Facebook'][not(contains(@class, 'mobile-header-wrapper'))]");
+        //this.pinterestIcon = page.locator("//div[contains(@class, 'header-socials') and contains(@class, 'mob-justify-content')]//a[@data-tooltip='Pinterest'][not(contains(@class, 'mobile-header-wrapper'))]");
+        this.pinterestIcon = page.getByRole('link', { name: 'Pinterest' })
+            .filter({ hasNot: page.locator('.mobile-header-wrapper') });
+        this.instagramIcon = page.getByRole('link', { name: 'Instagram' })
+            .filter({ hasNot: page.locator('.mobile-header-wrapper') });
+        this.twitterIcon = page.getByRole('link', { name: 'Twitter' })
+            .filter({ hasNot: page.locator('.mobile-header-wrapper') });
+        this.facebookIcon = page.getByRole('link', { name: 'Facebook' })
+            .filter({ hasNot: page.locator('.mobile-header-wrapper') })
 
         // Main Navigation Menu
-        this.homeMenu = page.locator("//ul[@id='menu-main-menu-1']//li[contains(normalize-space(), 'Home')]");
-        this.aboutUsMenu = page.locator("//ul[@id='menu-main-menu-1']//li[contains(normalize-space(), 'About Us')]");
-        this.shopMenu = page.locator("//ul[@id='menu-main-menu-1']//li[contains(normalize-space(), 'Shop')]");
-        this.offersMenu = page.locator("//ul[@id='menu-main-menu-1']//li//a[contains(text(), 'Offers')]");
-        this.blogMenu = page.locator("//ul[@id='menu-main-menu-1']//li//a[contains(text(), 'Blog')]");
-        this.contactUsMenu = page.locator("//ul[@id='menu-main-menu-1']//li//a[contains(text(), 'Contact Us')]");
+        //this.homeMenu = page.locator("//ul[@id='menu-main-menu-1']//li[contains(normalize-space(), 'Home')]");
+        this.homeMenu = page.locator('#menu-main-menu-1').getByRole('link', { name: 'Home' });
+        this.aboutUsMenu = page.locator('#menu-main-menu-1').getByRole('link', { name: 'About Us' });
+        this.shopMenu = page.locator('#menu-main-menu-1').getByRole('link', { name: 'Shop' });
+        this.offersMenu = page.locator('#menu-main-menu-1').getByRole('link', { name: 'Offers' });
+        this.blogMenu = page.locator('#menu-main-menu-1').getByRole('link', { name: 'Blog' });
+        this.contactUsMenu = page.locator('#menu-main-menu-1').getByRole('link', { name: 'Contact Us' });
     }
 
     // ==================== COMMON METHODS ====================
