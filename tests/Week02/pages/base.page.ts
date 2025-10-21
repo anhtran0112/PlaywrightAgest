@@ -251,7 +251,6 @@ export class BasePage {
         return await this.page.title();
     }
 
-
     public async countProductsAfterSearch(productName: string): Promise<number> {
         // Locator động cho các sản phẩm theo tên
         const productLocator = this.page.locator(`//h2[@class='product-title']//a[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${productName}')]`);

@@ -16,6 +16,8 @@ export class HomePage extends BasePage {
     private watchesLink: Locator;
     private allCategoryItems: Locator;
     private allDepartmentsItems: Locator;
+    
+
 
     // Tham số truyền vào là một instance của Playwright Page
     constructor(page: Page) {

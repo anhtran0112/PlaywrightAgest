@@ -10,6 +10,7 @@ export class ShopPage extends BasePage {
     private addProductToCartButton: Locator;
     private selectProductFromProductPagetButton: Locator;
     private addProductDetailsToCartButton: Locator;
+
     constructor(page: Page) {
         // Gọi constructor của class cha (Base page)
         super(page);
@@ -24,6 +25,8 @@ export class ShopPage extends BasePage {
         this.selectProductFromProductPagetButton = page.locator('.product-title a')
             .filter({ hasText: 'AirPods' });
         this.addProductDetailsToCartButton = page.getByRole('button', { name: 'Add to cart' });
+
+
     }
 
 
@@ -105,4 +108,41 @@ export class ShopPage extends BasePage {
         await this.cartNotification.waitFor({ state: 'visible', timeout: 5000 });
         return await this.cartNotification.isVisible();
     }
+
+    // Demo code
+    public async findProductInCart(productName: string) {
+        // Lấy toàn bộ row chứa sản phẩm trong cart
+        const productRows = this.page.locator('tr.woocommerce-cart-form__cart-item cart_item st-item-meta');
+        const rowCount = await productRows.count();
+        console.log(`Found ${rowCount} products in cart`);
+        for (let i = 0; i < rowCount; i++) {
+            const currentRow = productRows.nth(i);
+            // Tìm product title trong td.product-details
+            const productTitleElement = currentRow.locator('td.product-details .product-title');
+            if (await productTitleElement.count() > 0) {
+                const actualProductName = await productTitleElement.textContent();
+                if (actualProductName && actualProductName.trim() === productName) {
+                    console.log(`Found product: "${productName}" at row ${i + 1}`);
+                    return currentRow;
+                }
+            }
+        }
+        console.log(`Product "${productName}" not found in cart`);
+        return null;
+    }
+ 
+    public async updateProductInCart(productName: string, quantity: number): Promise<void> {
+        // Tìm sản phẩm trong cart
+        const productRow = await this.findProductInCart(productName);
+        if (!productRow) {
+            throw new Error(`Product "${productName}" not found in cart`);
+        }
+        // Tìm quantity input trong td thứ 4 (product-quantity)
+        const quantityInput = productRow.locator('td.product-quantity input.qty');
+        // Clear và nhập quantity mới
+        await quantityInput.clear();
+        await quantityInput.fill(quantity.toString());
+        await this.page.waitForTimeout(2000);
+    }
+
 }
