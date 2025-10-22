@@ -28,4 +28,13 @@ export class ShopVerify {
             expect(afterCount).toBeLessThan(beforeCount);
         }
     }
+
+    async verifyCartProductAlert(): Promise<void> {
+        const isVisible = await this.shopPage.isCartUpdateAlertVisible();
+        if (isVisible===true) {
+            console.log("Cart updated");
+        } else {
+            console.log("Cart dit not update");
+        }
+    }
 }

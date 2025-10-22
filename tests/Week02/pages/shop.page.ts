@@ -10,6 +10,8 @@ export class ShopPage extends BasePage {
     private addProductToCartButton: Locator;
     private selectProductFromProductPagetButton: Locator;
     private addProductDetailsToCartButton: Locator;
+    private updateCartButton: Locator;
+    private updateCartAlert: Locator;
 
     constructor(page: Page) {
         // Gọi constructor của class cha (Base page)
@@ -25,10 +27,10 @@ export class ShopPage extends BasePage {
         this.selectProductFromProductPagetButton = page.locator('.product-title a')
             .filter({ hasText: 'AirPods' });
         this.addProductDetailsToCartButton = page.getByRole('button', { name: 'Add to cart' });
-
-
+        this.updateCartButton = page.getByRole('button', { name: 'Update cart' });
+        //this.updateCartAlert = page.getByRole('alert', { name: /^\s*Cart updated\.\s*$/i }).first();
+        this.updateCartAlert = page.locator('.woocommerce-message', { hasText: 'Cart updated.' });
     }
-
 
     public async getCartCountNumber(): Promise<number> {
         try {
@@ -78,11 +80,17 @@ export class ShopPage extends BasePage {
     }
 
     public async addProductToWishlist() {
+        //dsajdqwd
+    }
 
+    public async updateCart() {
+        await this.updateCartButton.click();
     }
 
     // Getter methods
     // Thêm method getPage()
+
+
 
     public getPage(): Page {
         return this.page;
@@ -104,15 +112,23 @@ export class ShopPage extends BasePage {
         await this.page.goto('/shop/');
     }
 
+    public async navigateToCartpage() {
+        await this.page.goto('/cart/');
+    }
+
     async isCartNotificationVisible(): Promise<boolean> {
         await this.cartNotification.waitFor({ state: 'visible', timeout: 5000 });
         return await this.cartNotification.isVisible();
     }
 
+    public async isCartUpdateAlertVisible(): Promise<boolean> {
+        await this.updateCartAlert.waitFor({ state: 'visible', timeout: 5000 });
+        return await this.updateCartAlert.isVisible();
+    }
     // Demo code
     public async findProductInCart(productName: string) {
         // Lấy toàn bộ row chứa sản phẩm trong cart
-        const productRows = this.page.locator('tr.woocommerce-cart-form__cart-item cart_item st-item-meta');
+        const productRows = this.page.locator('tr.woocommerce-cart-form__cart-item.cart_item.st-item-meta');
         const rowCount = await productRows.count();
         console.log(`Found ${rowCount} products in cart`);
         for (let i = 0; i < rowCount; i++) {
@@ -130,7 +146,7 @@ export class ShopPage extends BasePage {
         console.log(`Product "${productName}" not found in cart`);
         return null;
     }
- 
+
     public async updateProductInCart(productName: string, quantity: number): Promise<void> {
         // Tìm sản phẩm trong cart
         const productRow = await this.findProductInCart(productName);
