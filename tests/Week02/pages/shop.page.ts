@@ -116,6 +116,10 @@ export class ShopPage extends BasePage {
         await this.page.goto('/cart/');
     }
 
+    public async navigateToCheckoutPage() {
+        await this.page.goto('/checkout/');
+    }
+
     async isCartNotificationVisible(): Promise<boolean> {
         await this.cartNotification.waitFor({ state: 'visible', timeout: 5000 });
         return await this.cartNotification.isVisible();
