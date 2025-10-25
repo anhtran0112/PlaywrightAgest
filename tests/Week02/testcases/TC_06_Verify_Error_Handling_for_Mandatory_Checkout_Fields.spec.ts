@@ -14,37 +14,37 @@ const state = "New York";
 const phone = "";
 const email = "john.doe@example.com";
 
+test.beforeEach(async ({ page }) => {
+    const shopPage = new ShopPage(page);
+    
+    await test.step('Precondition: Navigate to Shop and add product to cart', async () => {
+        await shopPage.navigateToShoppage();
+        await shopPage.selectProductDetails('Beats Solo3 Wireless On-Ear');
+        await shopPage.addProductDetailToCart();
+        await shopPage.waitForTimeout(2000);
+    });
+});
+
 test('TC_06: Verify Error Handling for Mandatory Checkout Fields', async ({ page }) => {
     const cartPage = new CartPage(page);
     const shopPage = new ShopPage(page);
     const shopVerify = new ShopVerify(shopPage);
 
-    await test.step('Precondition Navigate to Shop page', async () => {
-        await shopPage.navigateToShoppage();
-    });
-
-    await test.step('Precondition Select any available product', async () => {
-        await shopPage.selectProductDetails('Beats Solo3 Wireless On-Ear');
-    });
-
-    await test.step('Precondition Click "Add to Cart" button', async () => {
-        await shopPage.addProductDetailToCart();
-        await shopPage.waitForTimeout(2000);
-    });
-
-    await test.step('1. Leave mandatory fields (address, payment info) blank', async () => {
+    await test.step('1. Navigate to Checkout and fill form with blank phone', async () => {
         await shopPage.navigateToCheckoutPage();
         await shopPage.waitForTimeout(2000);
-        await cartPage.fillDataIntoBillingOrder({ firstName, lastName, company, country, address, city, postcode, state, phone, email });
+        await cartPage.fillDataIntoBillingOrder({ 
+            firstName, lastName, company, country, address, 
+            city, postcode, state, phone, email 
+        });
     });
 
-    await test.step('2. Click Confirm Order', async () => {
+    await test.step('2. Click Place Order button', async () => {
         await cartPage.clickPlaceOrder();
         await cartPage.waitForTimeout(2000);
     });
 
-    await test.step('3. Verify error messages', async () => {
+    await test.step('3. Verify error messages are displayed', async () => {
         await shopVerify.verifyErrorMessagesExist();
     });
-
 });
