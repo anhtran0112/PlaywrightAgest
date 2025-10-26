@@ -24,12 +24,16 @@ export class ShopPage extends BasePage {
         this.addProductToCartButton = page.locator('a.add_to_cart_button')
             .filter({ hasText: 'Add to cart' })
             .filter({ has: page.locator('[data-product_name="AirPods"]') });
-        this.selectProductFromProductPagetButton = page.locator('.product-title a')
-            .filter({ hasText: 'AirPods' });
+
+        this.selectProductFromProductPagetButton = page.locator('//a[contains(@href, "?add-to-cart=40") and @data-product_name="AirPods"]/../h2[@class="product-title"]');
+
         this.addProductDetailsToCartButton = page.getByRole('button', { name: 'Add to cart' });
         this.updateCartButton = page.getByRole('button', { name: 'Update cart' });
         //this.updateCartAlert = page.getByRole('alert', { name: /^\s*Cart updated\.\s*$/i }).first();
         this.updateCartAlert = page.locator('.woocommerce-message', { hasText: 'Cart updated.' });
+        //this.page.locator('.product-title a')
+        //.filter({ hasText: "Beats Solo3 Wireless On-Ear" }).first();
+
     }
 
     public async getCartCountNumber(): Promise<number> {
@@ -45,8 +49,11 @@ export class ShopPage extends BasePage {
     }
 
     public async selectProductDetails(productName: string): Promise<void> {
-        const selectProductFromProductPageButton = this.page.locator('.product-title a')
-            .filter({ hasText: productName });
+        //const selectProductFromProductPageButton = this.page
+        //   .locator('.product-title a')
+        //    .filter({ hasText: productName }).first();
+        const selectProductFromProductPageButton = this.page
+            .locator(`//a[contains(@href, "?add-to-cart=40") and @data-product_name="${productName}"]/../h2[@class="product-title"]`);
         try {
             await selectProductFromProductPageButton.waitFor({ state: 'visible', timeout: 10000 });
             await selectProductFromProductPageButton.click();
@@ -129,7 +136,7 @@ export class ShopPage extends BasePage {
         await this.updateCartAlert.waitFor({ state: 'visible', timeout: 5000 });
         return await this.updateCartAlert.isVisible();
     }
-    // Demo code
+
     public async findProductInCart(productName: string) {
         // Lấy toàn bộ row chứa sản phẩm trong cart
         const productRows = this.page.locator('tr.woocommerce-cart-form__cart-item.cart_item.st-item-meta');
@@ -157,12 +164,10 @@ export class ShopPage extends BasePage {
         if (!productRow) {
             throw new Error(`Product "${productName}" not found in cart`);
         }
-        // Tìm quantity input trong td thứ 4 (product-quantity)
         const quantityInput = productRow.locator('td.product-quantity input.qty');
         // Clear và nhập quantity mới
         await quantityInput.clear();
         await quantityInput.fill(quantity.toString());
         await this.page.waitForTimeout(2000);
     }
-
 }

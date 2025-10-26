@@ -34,7 +34,7 @@ export class ShopVerify {
         }
     }
 
-    async verifyCartProductAlert(): Promise<void> {
+    async verifyCartProductAlert(productName: string): Promise<void> {
         const isVisible = await this.shopPage.isCartUpdateAlertVisible();
         if (isVisible === true) {
             console.log("Cart updated");

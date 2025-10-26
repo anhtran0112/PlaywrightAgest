@@ -123,6 +123,10 @@ export class CartPage extends BasePage {
         }
     }
 
+    public getPage(): Page {
+        return this.page;
+    }
+
     public async clickPlaceOrder(): Promise<void> {
         await this.placeOrderButton.click();
     }
@@ -132,5 +136,74 @@ export class CartPage extends BasePage {
         return await this.errorMessagesNotification.isVisible();
     }
 
+    public async isProductInCart(productName: string): Promise<boolean> {
+        // Lấy toàn bộ row chứa sản phẩm trong cart
+        const productRows = this.page.locator('tr.woocommerce-cart-form__cart-item.cart_item.st-item-meta');
+        const rowCount = await productRows.count();
+        for (let i = 0; i < rowCount; i++) {
+            const currentRow = productRows.nth(i);
+            // Tìm product title trong td.product-details
+            const productTitleElement = currentRow.locator('td.product-details .product-title');
+            if (await productTitleElement.count() > 0) {
+                const actualProductName = await productTitleElement.textContent();
+                if (actualProductName && actualProductName.trim() === productName) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
+    public async findProductInCart(productName: string) {
+        // Lấy toàn bộ row chứa sản phẩm trong cart
+        const productRows = this.page.locator('tr.woocommerce-cart-form__cart-item.cart_item.st-item-meta');
+        const rowCount = await productRows.count();
+        console.log(`Found ${rowCount} products in cart`);
+        for (let i = 0; i < rowCount; i++) {
+            const currentRow = productRows.nth(i);
+            // Tìm product title trong td.product-details
+            const productTitleElement = currentRow.locator('td.product-details .product-title');
+            if (await productTitleElement.count() > 0) {
+                const actualProductName = await productTitleElement.textContent();
+                if (actualProductName && actualProductName.trim() === productName) {
+                    console.log(`Found product: "${productName}" at row ${i + 1}`);
+                    return currentRow;
+                }
+            }
+        }
+        console.log(`Product "${productName}" not found in cart`);
+        return null;
+    }
+
+    public async removeProductFromCart(productName: string): Promise<void> {
+        const productRow = await this.findProductInCart(productName);
+        if (!productRow) {
+            throw new Error(`Product "${productName}" not found in cart`);
+        }
+        const removeLink = productRow.locator('a.remove-item.text-underline');
+        await removeLink.click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.waitForTimeout(1000);
+    }
+
+    public async clearShoppingCart(): Promise<void> {
+        // Lấy tất cả sản phẩm trong cart
+        const productRows = this.page.locator('tr.woocommerce-cart-form__cart-item.cart_item.st-item-meta');
+        const rowCount = await productRows.count();
+        console.log(`Clearing ${rowCount} products from cart`);
+        for (let i = rowCount - 1; i >= 0; i--) {
+            const removeLink = this.page.locator('a.remove-item.text-underline').nth(i);
+            await removeLink.click();
+            await this.page.waitForTimeout(500);
+        }
+
+        // Verify cart is empty
+        await this.page.waitForSelector('tr.woocommerce-cart-form__cart-item', { state: 'detached' });
+        console.log('Shopping cart cleared successfully');
+    }
+
+    public async getCartItemCount(): Promise<number> {
+        const productRows = this.page.locator('tr.woocommerce-cart-form__cart-item.cart_item.st-item-meta');
+        return await productRows.count();
+    }
 }

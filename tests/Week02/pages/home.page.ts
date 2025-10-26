@@ -17,8 +17,6 @@ export class HomePage extends BasePage {
     private allCategoryItems: Locator;
     private allDepartmentsItems: Locator;
     
-
-
     // Tham số truyền vào là một instance của Playwright Page
     constructor(page: Page) {
         // Gọi constructor của class cha (Base page)
