@@ -6,6 +6,9 @@ export class LoginPage extends BasePage {
     private usernameField: Locator;
     private passwordField: Locator;
     private loginButton: Locator;
+    private registerEmailField: Locator;
+    private registerButton: Locator;
+
     constructor(page: Page) {
         // Gọi constructor của class cha (Base page)
         super(page);
@@ -13,10 +16,23 @@ export class LoginPage extends BasePage {
         this.usernameField = page.getByLabel('Username')
         this.passwordField = page.getByLabel('Password');
         this.loginButton = page.getByRole('button', { name: 'Log in' });
+        this.registerEmailField = page.locator('#reg_email');;
+        this.registerButton = page.getByRole('button', { name: 'Register' });
     }
 
     public async navigateToLoginpage() {
         await this.page.goto('/my-account/');
+    }
+
+    // Method nhập email
+    public async enterEmail(email: string) {
+        await this.registerEmailField.fill(email);
+    }
+
+
+    // Method click register button
+    public async clickRegisterButton() {
+        await this.registerButton.click();
     }
 
     // Method nhập username
@@ -41,4 +57,13 @@ export class LoginPage extends BasePage {
         await this.clickLoginButton();
         await this.page.waitForLoadState('networkidle');
     }
+
+    public async registerWithValidEmail(email: string, password: string) {
+        await this.enterEmail(email);
+        await this.clickRegisterButton();
+        await this.page.waitForLoadState('networkidle');
+    }
+
+    
+
 }

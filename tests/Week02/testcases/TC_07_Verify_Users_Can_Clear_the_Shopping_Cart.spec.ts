@@ -36,7 +36,6 @@ test('TC_07: Verify Users Can Clear the Shopping Cart', async ({ page }) => {
     await test.step('4.Click on Clear shopping cart', async () => {
         await cartPage.clearShoppingCart();
         await shopPage.waitForTimeout(2000);
-
     });
 
     await test.step('5.Verify empty cart page displays', async () => {
