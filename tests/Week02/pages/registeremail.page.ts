@@ -49,13 +49,6 @@ export class RegisterEmailPage {
         await this.closePopupButton.click();
     }
 
-    // Method creatEmailName (tra ra emailName)
-    // Click this button //this.editNameOfEmailButton = page.locator('#inbox-id');
-    //Fill value //this.editNameOfEmailField = page.locator('#inbox-id input[type="text"]');
-    //Click set button //this.setButton = page.getByRole('button', { name: 'Set' });
-    //Click button // this.scrambleButton = page.getByText('Scramble Address');
-    //Get email name sau khi fill this.emailField = page.locator('#email-widget');
-
     private async generateData(dataName: string): Promise<string> {
         const now = new Date();
         const hours = now.getHours().toString().padStart(2, '0');
