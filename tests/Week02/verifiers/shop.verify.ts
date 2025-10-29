@@ -12,10 +12,8 @@ export class ShopVerify {
         // Nhận ShopPage instance từ bên ngoài
         // Tạo ra một đối tượng ShopPage mới từ bản thiết kế ShopPage. 
         this.shopPage = shopPage;
-
         // Tạo BasePage từ page của HomePage thông qua getter
         this.basePage = new BasePage(shopPage.getPage());
-
         this.cartPage = new CartPage(shopPage.getPage());
     }
 
@@ -34,7 +32,7 @@ export class ShopVerify {
         }
     }
 
-    async verifyCartProductAlert(productName: string): Promise<void> {
+    async verifyCartProductAlert(): Promise<void> {
         const isVisible = await this.shopPage.isCartUpdateAlertVisible();
         if (isVisible === true) {
             console.log("Cart updated");
@@ -50,5 +48,21 @@ export class ShopVerify {
         } else {
             console.log("Error messages do not exist");
         }
+    }
+
+    public async verifyPaymentMethodSelected(paymentMethod: string): Promise<void> {
+        const isSelected = await this.cartPage.isPaymentMethodSelected(paymentMethod);
+        expect(isSelected).toBe(true);
+    }
+
+    public async verifyOrderPlacedSuccessfully(): Promise<void> {
+        const orderStatusVisible = await this.cartPage.isOrderStatusVisible();
+        expect(orderStatusVisible).toBe(true);
+    }
+
+    public async verifyOrderNumberGenerated(): Promise<void> {
+        const orderNumber = await this.cartPage.getOrderNumber();
+        expect(orderNumber?.length).toBeGreaterThan(0);
+        console.log(`Order number generated: ${orderNumber}`);
     }
 }
