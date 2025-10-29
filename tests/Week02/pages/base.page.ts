@@ -103,6 +103,13 @@ export class BasePage {
         await this.acceptCookiesButton.click();
     }
 
+    public async acceptCookiesIfVisible(): Promise<void> {
+        const cookieButton = this.acceptCookiesButton;
+        if (await cookieButton.isVisible()) {
+            await cookieButton.click();
+        }
+    }
+    
     public async selectCategories(category: 'All categories' | 'Accessory Bundles' | 'Acoustic Components' | 'Air-conditioning Installation'): Promise<void> {
         const categoryDropdown = this.page.locator('//select[contains(@id, "product_cat-")]');
         await categoryDropdown.selectOption({ label: category });

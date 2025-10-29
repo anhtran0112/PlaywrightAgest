@@ -58,12 +58,10 @@ export class LoginPage extends BasePage {
         await this.page.waitForLoadState('networkidle');
     }
 
-    public async registerWithValidEmail(email: string, password: string) {
+    public async registerWithValidEmail(email: string) {
         await this.enterEmail(email);
         await this.clickRegisterButton();
         await this.page.waitForLoadState('networkidle');
     }
-
-    
 
 }

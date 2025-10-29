@@ -10,7 +10,6 @@ export class CartPage extends BasePage {
     private proceedToCheckoutButton: Locator;
     private emptyCartMessage: Locator;
     private cartTotal: Locator;
-
     private firstNameInput: Locator;
     private lastNameInput: Locator;
     private companyNameInput: Locator;
@@ -21,13 +20,13 @@ export class CartPage extends BasePage {
     private stateInput: Locator;
     private phoneInput: Locator;
     private emailInput: Locator;
-    private createAccCheckbox: Locator;
     private placeOrderButton: Locator;
-    private confirmOrderButton: Locator;
     private errorMessagesNotification: Locator;
-    private orderConfirmation: Locator;
+    private directBankTransferRadioButton: Locator;
+    private checkPaymentsRadioButton: Locator;
+    private cashOnDeliveryRadioButton: Locator;
+    private orderStatus: Locator;
     private orderNumber: Locator;
-
 
     constructor(page: Page) {
         // Gọi constructor của class cha (Base page)
@@ -42,16 +41,13 @@ export class CartPage extends BasePage {
         this.postcodeInput = page.locator("//input[@id='billing_postcode']");
         this.phoneInput = page.locator("//input[@id='billing_phone']");
         this.emailInput = page.locator("//input[@id='billing_email']");
-        this.createAccCheckbox = page.locator("//input[@id='createaccount']");
-        this.placeOrderButton = page.locator("//button[@id='place_order']");
-
-        this.confirmOrderButton = page.locator("//button[contains(text(), 'Confirm Order')]");
         this.errorMessagesNotification = page.locator('ul.woocommerce-error');
-        //this.errorMessagesNotification = page.locator('ul.woocommerce-error')
-        //    .filter({ has: page.locator('[role="alert"]') });
-        this.orderConfirmation = page.locator("//div[contains(@class, 'order-confirmation')]");
-        this.orderNumber = page.locator("//span[@class='order-number']");
-
+        this.directBankTransferRadioButton = page.getByRole('radio', { name: 'Direct bank transfer' });
+        this.checkPaymentsRadioButton = page.getByRole('radio', { name: 'Check payments' });
+        this.cashOnDeliveryRadioButton = page.getByRole('radio', { name: 'Cash on delivery' });
+        this.placeOrderButton = page.locator("//button[@id='place_order']");
+        this.orderStatus = page.locator('div.woocommerce-order').getByText('Thank you. Your order has been received.');
+        this.orderNumber = page.locator('div.woocommerce-order-overview-wrapper li', { hasText: 'Order number' });
         this.cartItems = page.locator("//table[@class='cart-table']//tr");
         this.quantityInput = page.locator("//input[@type='number']");
         this.updateCartButton = page.locator("//button[contains(text(), 'Update Cart')]");
@@ -116,7 +112,6 @@ export class CartPage extends BasePage {
         await this.postcodeInput.fill(orderData.postcode);
         await this.phoneInput.fill(orderData.phone);
         await this.emailInput.fill(orderData.email);
-
         // Fill optional company field
         if (orderData.company) {
             await this.companyNameInput.fill(orderData.company);
@@ -205,5 +200,56 @@ export class CartPage extends BasePage {
     public async getCartItemCount(): Promise<number> {
         const productRows = this.page.locator('tr.woocommerce-cart-form__cart-item.cart_item.st-item-meta');
         return await productRows.count();
+    }
+
+    public async selectPaymentMethod(paymentMethod: string): Promise<void> {
+        switch (paymentMethod.toLowerCase()) {
+            case 'direct bank transfer':
+                await this.directBankTransferRadioButton.click();
+                break;
+            case 'check payments':
+                await this.checkPaymentsRadioButton.click();
+                break;
+            case 'cash on delivery':
+                await this.cashOnDeliveryRadioButton.click();
+                break;
+            default:
+                console.warn(`Payment method "${paymentMethod}" is not supported. Selecting default: Direct Bank Transfer.`);
+                await this.directBankTransferRadioButton.click();
+                break;
+        }
+        await this.page.waitForTimeout(1000);
+    }
+
+    public async isPaymentMethodSelected(paymentMethod: string): Promise<boolean> {
+        switch (paymentMethod.toLowerCase()) {
+            case 'direct bank transfer':
+                return await this.directBankTransferRadioButton.isChecked();
+            case 'check payments':
+                return await this.checkPaymentsRadioButton.isChecked();
+            case 'cash on delivery':
+                return await this.cashOnDeliveryRadioButton.isChecked();
+            default:
+                return false;
+        }
+    }
+    
+    public async isOrderStatusVisible(): Promise<boolean> {
+        try {
+            await this.orderStatus.waitFor({ state: 'visible', timeout: 10000 });
+            return await this.orderStatus.isVisible();
+        } catch {
+            return false;
+        }
+    }
+
+    public async getOrderNumber(): Promise<string> {
+        try {
+            await this.orderNumber.waitFor({ state: 'visible', timeout: 10000 });
+            const orderNumberText = await this.orderNumber.textContent();
+            return orderNumberText ? orderNumberText.trim() : '';
+        } catch {
+            return '';
+        }
     }
 }

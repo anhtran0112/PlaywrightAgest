@@ -5,8 +5,6 @@ export class RegisterEmailPage {
     protected page: Page;
 
     // COMMON ELEMENTS
-    protected closePopupButton: Locator;
-    protected acceptCookiesButton: Locator;
     protected editNameOfEmailButton: Locator;
     protected editNameOfEmailField: Locator;
     protected setButton: Locator;
@@ -44,12 +42,7 @@ export class RegisterEmailPage {
         await this.page.reload();
     }
 
-    // Popup & Cookies
-    public async closePopup(): Promise<void> {
-        await this.closePopupButton.click();
-    }
-
-    private async generateData(dataName: string): Promise<string> {
+    public async generateData(dataName: string): Promise<string> {
         const now = new Date();
         const hours = now.getHours().toString().padStart(2, '0');
         const minutes = now.getMinutes().toString().padStart(2, '0');
@@ -59,7 +52,7 @@ export class RegisterEmailPage {
         return newDataName;
     }
 
-    private async createEmailName(newEmailName: string): Promise<string> {
+    public async createEmailName(newEmailName: string): Promise<string> {
         // Locators:
         const editNameOfEmailButton = this.page.locator('#inbox-id');
         const editNameOfEmailField = this.page.locator('#inbox-id input[type="text"]');

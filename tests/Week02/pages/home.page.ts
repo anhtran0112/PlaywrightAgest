@@ -16,7 +16,7 @@ export class HomePage extends BasePage {
     private watchesLink: Locator;
     private allCategoryItems: Locator;
     private allDepartmentsItems: Locator;
-    
+
     // Tham số truyền vào là một instance của Playwright Page
     constructor(page: Page) {
         // Gọi constructor của class cha (Base page)
@@ -71,6 +71,8 @@ export class HomePage extends BasePage {
     public async waitForTimeout(ms: number): Promise<void> {
         await this.page.waitForTimeout(ms);
     }
+
+
     // Category Navigation Methods
     public async clickAutomobilesLink(): Promise<void> {
         await this.automobilesLink.waitFor({ timeout: 30000 });
