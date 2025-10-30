@@ -65,4 +65,22 @@ export class ShopVerify {
         expect(orderNumber?.length).toBeGreaterThan(0);
         console.log(`Order number generated: ${orderNumber}`);
     }
+
+    public async verifyWishlistTableNotEmpty2(): Promise<void> {
+        const productRows = (this.shopPage as any).locator('table.wishlist_table tbody tr');
+        const rowCount = await productRows.count();
+        expect(rowCount).toBeGreaterThan(0);
+        console.log(`Wishlist has ${rowCount} item(s)`);
+    }
+
+    public async verifyWishlistTableNotEmpty(): Promise<void> {
+        //const page = this.shopPage.getPage(); // lấy Page từ ShopPage
+        const wishlistTable = this.shopPage.getWishListTable();
+        const productRows = this.shopPage.getWishlistProductRows();
+        const rowCount = await productRows.count();
+        console.log(`Wishlist has ${rowCount} item(s)`);
+        const tableText = await wishlistTable.textContent();
+        expect(tableText?.includes('No products added to the wishlist')).toBe(true);
+        //console.log('Wishlist table have product item');
+    }
 }
