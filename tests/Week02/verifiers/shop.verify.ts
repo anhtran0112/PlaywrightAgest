@@ -73,14 +73,20 @@ export class ShopVerify {
         console.log(`Wishlist has ${rowCount} item(s)`);
     }
 
-    public async verifyWishlistTableNotEmpty(): Promise<void> {
-        //const page = this.shopPage.getPage(); // lấy Page từ ShopPage
+    public async verifyWishlistTableNotEmpty(): Promise<boolean> {
         const wishlistTable = this.shopPage.getWishListTable();
+        const tableMessageText = this.shopPage.getnoRecordMessage();
         const productRows = this.shopPage.getWishlistProductRows();
         const rowCount = await productRows.count();
-        console.log(`Wishlist has ${rowCount} item(s)`);
+        console.log(`Wishlist has ${rowCount} row`);
         const tableText = await wishlistTable.textContent();
-        expect(tableText?.includes('No products added to the wishlist')).toBe(true);
-        //console.log('Wishlist table have product item');
+        const tableMessage = await tableMessageText.textContent();
+        if (rowCount >= 1 && tableText !== "" && tableMessage !== "No products added to the wishlist") {
+            console.log("Wishlist table have product item");
+            return true;
+        } else {
+            console.log("Wishlist table does not have product item");
+            return false;
+        }
     }
 }

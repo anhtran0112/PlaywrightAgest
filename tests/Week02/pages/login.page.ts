@@ -8,6 +8,7 @@ export class LoginPage extends BasePage {
     private loginButton: Locator;
     private registerEmailField: Locator;
     private registerButton: Locator;
+    private welcomeMessage: Locator; 
 
     constructor(page: Page) {
         // Gọi constructor của class cha (Base page)
@@ -18,8 +19,17 @@ export class LoginPage extends BasePage {
         this.loginButton = page.getByRole('button', { name: 'Log in' });
         this.registerEmailField = page.locator('#reg_email');;
         this.registerButton = page.getByRole('button', { name: 'Register' });
+        this.welcomeMessage= page.getByRole('heading', { name: /welcome to your account page/i });
     }
 
+    // Thêm method getPage()
+    public getPage(): Page {
+        return this.page;
+    }
+
+     public getWelcomeMessage(): Locator {
+        return this.welcomeMessage;
+    }
     public async navigateToLoginpage() {
         await this.page.goto('/my-account/');
     }
@@ -63,5 +73,7 @@ export class LoginPage extends BasePage {
         await this.clickRegisterButton();
         await this.page.waitForLoadState('networkidle');
     }
+
+
 
 }

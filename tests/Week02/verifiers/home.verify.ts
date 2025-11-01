@@ -131,4 +131,6 @@ export class HomeVerify {
         await dynamicTextLocator.waitFor({ state: 'visible', timeout: 30000 });
         await this.verifyLinkNavigation(category.name, category.expectedUrl);
     }
+
+    
 }

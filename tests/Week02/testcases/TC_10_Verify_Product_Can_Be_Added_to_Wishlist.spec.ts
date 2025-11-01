@@ -22,16 +22,27 @@ test('TC_10: Verify Guest User Can Add to Wishlist', async ({ page }) => {
     const shopVerify = new ShopVerify(shopPage);
     const homePage = new HomePage(page);
 
-    await test.step('1. Navigate to Shop page', async () => {
+    await test.step('1.Navigate to Shop page', async () => {
         await homePage.navigateToHomepage();
         await homePage.closePopup();
         await homePage.acceptCookies();
         await homePage.selectCategories('All categories');
+    });
+    await test.step('2.ind a product', async () => {
         await homePage.searchForProduct('AirPods');
         await shopPage.waitForTimeout(2000);
         //await shopPage.selectProductDetails('AirPods');
+    });
+    await test.step('3.Click wishlist icon', async () => {
         await shopPage.addProductToWishlist();
+    });
+
+    await test.step('4.Product should be added to wishlist', async () => {
         await shopPage.navigateToWishListPage();
         await shopVerify.verifyWishlistTableNotEmpty();
+        const result = await shopVerify.verifyWishlistTableNotEmpty();
+        if (!result) {
+            throw new Error("Wishlist should have products but it's empty");
+        }
     });
 });
