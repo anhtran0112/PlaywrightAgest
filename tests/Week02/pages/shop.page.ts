@@ -20,25 +20,17 @@ export class ShopPage extends BasePage {
         // Gọi constructor của class cha (Base page)
         super(page);
         this.productItems = page.locator("//div[@class='product-item']");
-        //this.wishlistButton = page.locator("//div[@class='yith-wcwl-add-button']//span[contains(text(),'Add to wishlist')]");
-        //this.wishlistButton = page.getByRole('link', { name: 'Add to wishlist' });
-
         this.wishlistButton = page.locator('//div[@class="product-information-inner"]//div[@class="yith-wcwl-add-button"]//span[contains(text(),"Add to wishlist")]');
-
         this.cartNotification = page.locator('.et-notify')
             .filter({ hasText: 'Product added.' });
         this.cartCount = page.locator("div.header-wrapper a[href] span.et-cart-quantity:not(.mobile-header-wrapper)");
         this.addProductToCartButton = page.locator('a.add_to_cart_button')
             .filter({ hasText: 'Add to cart' })
             .filter({ has: page.locator('[data-product_name="AirPods"]') });
-
         this.selectProductFromProductPagetButton = page.locator('//a[contains(@href, "?add-to-cart=40") and @data-product_name="AirPods"]/../h2[@class="product-title"]');
         this.addProductDetailsToCartButton = page.getByRole('button', { name: 'Add to cart' });
         this.updateCartButton = page.getByRole('button', { name: 'Update cart' });
-        //this.updateCartAlert = page.getByRole('alert', { name: /^\s*Cart updated\.\s*$/i }).first();
         this.updateCartAlert = page.locator('.woocommerce-message', { hasText: 'Cart updated.' });
-        //this.page.locator('.product-title a')
-        //.filter({ hasText: "Beats Solo3 Wireless On-Ear" }).first();
         this.wishListTable = page.locator('//table[normalize-space(@class)="shop_table cart wishlist_table wishlist_view traditional responsive"]');
         this.noRecordMessage = page.locator('td.wishlist-empty');
         this.wishlistProductRows = page.locator('table.wishlist_table tbody tr');
@@ -57,9 +49,6 @@ export class ShopPage extends BasePage {
     }
 
     public async selectProductDetails(productName: string): Promise<void> {
-        //const selectProductFromProductPageButton = this.page
-        //   .locator('.product-title a')
-        //    .filter({ hasText: productName }).first();
         const selectProductFromProductPageButton = this.page
             .locator(`//a[contains(@href, "?add-to-cart=40") and @data-product_name="${productName}"]/../h2[@class="product-title"]`);
         try {
@@ -103,8 +92,6 @@ export class ShopPage extends BasePage {
     }
 
     // Getter methods
-    // Thêm method getPage()
-
     public getPage(): Page {
         return this.page;
     }

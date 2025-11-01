@@ -23,7 +23,6 @@ export class HomePage extends BasePage {
         super(page);
         // All Departments Menu Links - chỉ có trên HomePage
         const allLinksInMenu = page.locator('#menu-all-departments-1');
-        //this.automobilesLink = page.locator("//ul[@id='menu-all-departments-1']//a[@href='https://demo.testarchitect.com/product-category/automobiles-motorcycles/']");
         this.automobilesLink = allLinksInMenu.locator('a', { hasText: /Automobiles & Motorcycles/i })
             .filter({ hasNot: page.locator('div.mobile-header-wrapper') })
             .first();
@@ -119,24 +118,6 @@ export class HomePage extends BasePage {
         await this.watchesLink.click();
     }
 
-    /*public async hoverMouseAllCategoryItems(maxRetries: number = 3): Promise<void> {
-        for (let attempt = 1; attempt <= maxRetries; attempt++) {
-            await this.allDepartmentsItems.hover();
-            await this.page.waitForTimeout(300);
-            if (await this.isHoverEffectVisible()) {
-                return; // Success
-            }
-            if (attempt < maxRetries) {
-                await this.page.waitForTimeout(500);
-            }
-        }
-    }
-
-    private async isHoverEffectVisible(): Promise<boolean> {
-        const subMenu = this.page.locator('.sub-menu, .dropdown');
-        return await subMenu.isVisible();
-    }*/
-
     public async hoverMouseAllCategoryItems(): Promise<void> {
         await this.allDepartmentsItems.hover();
         await this.page.waitForTimeout(300);
@@ -196,5 +177,4 @@ export class HomePage extends BasePage {
     public async navigateToLogin() {
         await this.page.goto('/my-account/');
     }
-
 }
