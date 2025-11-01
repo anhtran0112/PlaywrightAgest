@@ -14,6 +14,7 @@ export class ShopPage extends BasePage {
     private updateCartAlert: Locator;
     private wishListTable: Locator;
     private wishlistProductRows: Locator;
+    private noRecordMessage: Locator;
 
     constructor(page: Page) {
         // Gọi constructor của class cha (Base page)
@@ -39,6 +40,7 @@ export class ShopPage extends BasePage {
         //this.page.locator('.product-title a')
         //.filter({ hasText: "Beats Solo3 Wireless On-Ear" }).first();
         this.wishListTable = page.locator('//table[normalize-space(@class)="shop_table cart wishlist_table wishlist_view traditional responsive"]');
+        this.noRecordMessage = page.locator('td.wishlist-empty');
         this.wishlistProductRows = page.locator('table.wishlist_table tbody tr');
     }
 
@@ -103,8 +105,6 @@ export class ShopPage extends BasePage {
     // Getter methods
     // Thêm method getPage()
 
-
-
     public getPage(): Page {
         return this.page;
     }
@@ -127,6 +127,10 @@ export class ShopPage extends BasePage {
 
     public getWishlistProductRows(): Locator {
         return this.wishlistProductRows;
+    }
+
+    public getnoRecordMessage(): Locator {
+        return this.noRecordMessage;
     }
 
     public async navigateToShoppage() {
