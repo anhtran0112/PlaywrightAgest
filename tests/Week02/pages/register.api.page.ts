@@ -81,18 +81,18 @@ export class RegisterAPIPage {
     const subject = 'Your TestArchitect Sample Website account has been created';
     const sender = 'noreply@demo.testarchitect.com';
     const email = await this.findEmailBySubject(subject, sidToken, emailAddr);
-    
+
     // Check xem co tim thay email ko
     if (!email || email.mail_from !== sender) {
       return null;
     }
     // Khoi tao API request de lay boday cua email
-    const apiUrl = 'https://api.guerrillamail.com/ajax.php'; 
-    const requestContext = await request.newContext(); 
-    let body = ''; 
+    const apiUrl = 'https://api.guerrillamail.com/ajax.php';
+    const requestContext = await request.newContext();
+    let body = '';
     const maxRetries = 2;
-    const delayMs = 2000; 
-    
+    const delayMs = 2000;
+
     // Get body cua email
     for (let i = 0; i < maxRetries; i++) {
       // Call API de set email user
@@ -100,7 +100,7 @@ export class RegisterAPIPage {
       // Goi API de get body email
       const res = await requestContext.get(`${apiUrl}?f=fetch_email&email_id=${email.mail_id}&sid_token=${sidToken}`);
       // Parse response thành JSON
-      const data = await res.json(); 
+      const data = await res.json();
       body = data.mail_body ?? '';
 
       // Nếu có nội dung email thì thoát vòng lặp
@@ -113,9 +113,9 @@ export class RegisterAPIPage {
 
     const linkPatterns = [
       // tim lost-password
-      /href="([^"]*lost-password[^"]*)"/, 
+      /href="([^"]*lost-password[^"]*)"/,
       // tim testarchitect
-      /href="(https:\/\/demo\.testarchitect\.com[^"]*)"/ 
+      /href="(https:\/\/demo\.testarchitect\.com[^"]*)"/
     ];
 
     // Tim link va check
@@ -123,12 +123,12 @@ export class RegisterAPIPage {
       const match = body.match(pattern);
       if (match && match[1]) {
         // match[1] = "https://demo.testarchitect.com/lost-password/?action=reset&amp;key=ABC123&amp;login=user"
-        const link = match[1].replace(/&amp;/g, '&'); 
+        const link = match[1].replace(/&amp;/g, '&');
         await requestContext.dispose();
-        return link; 
+        return link;
       }
     }
-    
+
     // Nếu không tìm thấy link nào khớp
     await requestContext.dispose(); // Giải phóng tài nguyên request
     return null; // Trả về null
@@ -150,12 +150,22 @@ export class RegisterAPIPage {
 
   public async resetPassword(page: Page, newPassword: string): Promise<void> {
     console.log('Resetting password');
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('load', { timeout: 20000 });
+    
+    const closePopup = this.page.locator('.sales-booster-popup-inner >> text=×');
     const passwordInput = page.getByRole('textbox', { name: "New password" }).first();
     const passwordReInput = page.getByRole('textbox', { name: "Re-enter new password" });
     const savePassButton = page.getByRole('button', { name: "save" });
+
     await passwordInput.fill(newPassword);
+    await this.page.waitForTimeout(500);
     await passwordReInput.fill(newPassword);
+    if (await closePopup.isVisible()) {
+      await closePopup.click();
+    }
+    await this.page.waitForTimeout(500);
+    //const box = await savePassButton.boundingBox();
+    //console.log('Vị trí nút Save:', box);
     await savePassButton.click();
     console.log('Password reset completed');
   }

@@ -36,7 +36,7 @@ export default defineConfig({
     baseURL: 'https://demo.testarchitect.com/',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    navigationTimeout: 40000, 
+    navigationTimeout: 90000, 
     actionTimeout: 15000, // 15 giây cho actions (click, fill, etc.)
   },
 

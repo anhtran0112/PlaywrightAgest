@@ -8,7 +8,7 @@ export class LoginPage extends BasePage {
     private loginButton: Locator;
     private registerEmailField: Locator;
     private registerButton: Locator;
-    private welcomeMessage: Locator; 
+    private welcomeMessage: Locator;
 
     constructor(page: Page) {
         // Gọi constructor của class cha (Base page)
@@ -19,7 +19,7 @@ export class LoginPage extends BasePage {
         this.loginButton = page.getByRole('button', { name: 'Log in' });
         this.registerEmailField = page.locator('#reg_email');;
         this.registerButton = page.getByRole('button', { name: 'Register' });
-        this.welcomeMessage= page.getByRole('heading', { name: /welcome to your account page/i });
+        this.welcomeMessage = page.getByRole('heading', { name: /welcome to your account page/i });
     }
 
     // Thêm method getPage()
@@ -27,11 +27,13 @@ export class LoginPage extends BasePage {
         return this.page;
     }
 
-     public getWelcomeMessage(): Locator {
+    public getWelcomeMessage(): Locator {
         return this.welcomeMessage;
     }
     public async navigateToLoginpage() {
-        await this.page.goto('/my-account/');
+        await this.page.goto('/my-account/', { waitUntil: 'domcontentloaded', timeout: 90000 });
+        await this.page.waitForLoadState('networkidle');
+        //await this.page.waitForSelector('text=Log in');
     }
 
     // Method nhập email
@@ -62,18 +64,28 @@ export class LoginPage extends BasePage {
 
     // Method login với valid credentials (có tham số)
     public async loginWithValidCredentials(username: string, password: string) {
+        const closePopup = this.page.locator('.sales-booster-popup-inner >> text=×');
+        if (await closePopup.isVisible()) {
+            await closePopup.click();
+        }
+        await this.page.waitForLoadState('load', { timeout: 20000 });
+        if (await closePopup.isVisible()) {
+            await closePopup.click();
+        }
         await this.enterUsername(username);
+        //await this.page.waitForTimeout(500);
         await this.enterPassword(password);
+        if (await closePopup.isVisible()) {
+            await closePopup.click();
+        }
+        //await this.page.waitForTimeout(500);
         await this.clickLoginButton();
-        await this.page.waitForLoadState('networkidle');
     }
 
     public async registerWithValidEmail(email: string) {
+        await this.page.waitForLoadState('load', { timeout: 20000 });
         await this.enterEmail(email);
+        await this.page.waitForTimeout(500);
         await this.clickRegisterButton();
-        await this.page.waitForLoadState('networkidle');
     }
-
-
-
 }
