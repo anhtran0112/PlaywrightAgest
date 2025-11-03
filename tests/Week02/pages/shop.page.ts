@@ -12,24 +12,28 @@ export class ShopPage extends BasePage {
     private addProductDetailsToCartButton: Locator;
     private updateCartButton: Locator;
     private updateCartAlert: Locator;
+    private wishListTable: Locator;
+    private wishlistProductRows: Locator;
+    private noRecordMessage: Locator;
 
     constructor(page: Page) {
         // Gọi constructor của class cha (Base page)
         super(page);
         this.productItems = page.locator("//div[@class='product-item']");
-        this.wishlistButton = page.locator("// 'UpdateSau')]");
+        this.wishlistButton = page.locator('//div[@class="product-information-inner"]//div[@class="yith-wcwl-add-button"]//span[contains(text(),"Add to wishlist")]');
         this.cartNotification = page.locator('.et-notify')
             .filter({ hasText: 'Product added.' });
         this.cartCount = page.locator("div.header-wrapper a[href] span.et-cart-quantity:not(.mobile-header-wrapper)");
         this.addProductToCartButton = page.locator('a.add_to_cart_button')
             .filter({ hasText: 'Add to cart' })
             .filter({ has: page.locator('[data-product_name="AirPods"]') });
-        this.selectProductFromProductPagetButton = page.locator('.product-title a')
-            .filter({ hasText: 'AirPods' });
+        this.selectProductFromProductPagetButton = page.locator('//a[contains(@href, "?add-to-cart=40") and @data-product_name="AirPods"]/../h2[@class="product-title"]');
         this.addProductDetailsToCartButton = page.getByRole('button', { name: 'Add to cart' });
         this.updateCartButton = page.getByRole('button', { name: 'Update cart' });
-        //this.updateCartAlert = page.getByRole('alert', { name: /^\s*Cart updated\.\s*$/i }).first();
         this.updateCartAlert = page.locator('.woocommerce-message', { hasText: 'Cart updated.' });
+        this.wishListTable = page.locator('//table[normalize-space(@class)="shop_table cart wishlist_table wishlist_view traditional responsive"]');
+        this.noRecordMessage = page.locator('td.wishlist-empty');
+        this.wishlistProductRows = page.locator('table.wishlist_table tbody tr');
     }
 
     public async getCartCountNumber(): Promise<number> {
@@ -45,8 +49,8 @@ export class ShopPage extends BasePage {
     }
 
     public async selectProductDetails(productName: string): Promise<void> {
-        const selectProductFromProductPageButton = this.page.locator('.product-title a')
-            .filter({ hasText: productName });
+        const selectProductFromProductPageButton = this.page
+            .locator(`//a[contains(@href, "?add-to-cart=40") and @data-product_name="${productName}"]/../h2[@class="product-title"]`);
         try {
             await selectProductFromProductPageButton.waitFor({ state: 'visible', timeout: 10000 });
             await selectProductFromProductPageButton.click();
@@ -80,7 +84,7 @@ export class ShopPage extends BasePage {
     }
 
     public async addProductToWishlist() {
-        //dsajdqwd
+        await this.wishlistButton.click();
     }
 
     public async updateCart() {
@@ -88,10 +92,6 @@ export class ShopPage extends BasePage {
     }
 
     // Getter methods
-    // Thêm method getPage()
-
-
-
     public getPage(): Page {
         return this.page;
     }
@@ -108,6 +108,18 @@ export class ShopPage extends BasePage {
         return this.productItems;
     }
 
+    public getWishListTable(): Locator {
+        return this.wishListTable;
+    }
+
+    public getWishlistProductRows(): Locator {
+        return this.wishlistProductRows;
+    }
+
+    public getnoRecordMessage(): Locator {
+        return this.noRecordMessage;
+    }
+
     public async navigateToShoppage() {
         await this.page.goto('/shop/');
     }
@@ -120,6 +132,10 @@ export class ShopPage extends BasePage {
         await this.page.goto('/checkout/');
     }
 
+    public async navigateToWishListPage() {
+        await this.page.goto('/wishlist/');
+    }
+
     async isCartNotificationVisible(): Promise<boolean> {
         await this.cartNotification.waitFor({ state: 'visible', timeout: 5000 });
         return await this.cartNotification.isVisible();
@@ -129,7 +145,7 @@ export class ShopPage extends BasePage {
         await this.updateCartAlert.waitFor({ state: 'visible', timeout: 5000 });
         return await this.updateCartAlert.isVisible();
     }
-    // Demo code
+
     public async findProductInCart(productName: string) {
         // Lấy toàn bộ row chứa sản phẩm trong cart
         const productRows = this.page.locator('tr.woocommerce-cart-form__cart-item.cart_item.st-item-meta');
@@ -157,12 +173,10 @@ export class ShopPage extends BasePage {
         if (!productRow) {
             throw new Error(`Product "${productName}" not found in cart`);
         }
-        // Tìm quantity input trong td thứ 4 (product-quantity)
         const quantityInput = productRow.locator('td.product-quantity input.qty');
         // Clear và nhập quantity mới
         await quantityInput.clear();
         await quantityInput.fill(quantity.toString());
         await this.page.waitForTimeout(2000);
     }
-
 }
