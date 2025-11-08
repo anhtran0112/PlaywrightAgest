@@ -1,0 +1,6 @@
+{
+    "logindata":{
+        "emailTemplate": "testuser_{timestamp}@example.com",
+        "password": "Playwright@123456"
+    }
+}
