@@ -55,8 +55,8 @@ export abstract class ProductPage extends BasePage {
 
     protected async getProductPrice(): Promise<string> {
         return await this.productPrice.textContent() || '';
-
     }
+
     protected async getSalePrice(): Promise<string> {
         return await this.salePrice.textContent() || '';
     }
@@ -67,10 +67,6 @@ export abstract class ProductPage extends BasePage {
 
     protected async getCategory(): Promise<string> {
         return await this.categoryLocator.textContent() || '';
-    }
-
-    protected async getTag(): Promise<string> {
-        return await this.tagLocator.textContent() || '';
     }
 
     protected async getQuantity(): Promise<string> {

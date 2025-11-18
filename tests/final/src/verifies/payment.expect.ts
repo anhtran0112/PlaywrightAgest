@@ -12,14 +12,10 @@ export class PaymentExpect {
         this.productAction = new ProductActionPage(page);
     }
 
-    static async verifyProductDescription(productPage: ProductActionPage): Promise<void> {
+    async verifyProductDescription(productPage: ProductActionPage): Promise<void> {
         await expect(productPage.productTitle).toBeVisible();
         const description = await productPage.getProductTitle();
         expect(description.trim().length).toBeGreaterThan(0);
-    }
-
-    static async verifyPriceComparison(productPage: ProductActionPage): Promise<void> {
-
     }
 
     async verifyRemoveItemSuccessful(productName: string): Promise<boolean> {
@@ -82,53 +78,11 @@ export class PaymentExpect {
         }
     }
 
-    async verifyOrderNumberExists(): Promise<void> {
-        const orderNumberElement = this.page.locator('.woocommerce-thankyou-order-details .order strong');
-        await expect(orderNumberElement).toBeVisible();
-        const orderNumber = await orderNumberElement.textContent();
-        expect(orderNumber).toBeTruthy();
-        expect(orderNumber!.trim().length).toBeGreaterThan(0);
-        console.log(`Order number exists: ${orderNumber}`);
-    }
-
     async verifyThankYouMessage(): Promise<void> {
         const thankYouMessage = this.page.locator('.woocommerce-thankyou-order-received');
         await expect(thankYouMessage).toBeVisible();
         await expect(thankYouMessage).toHaveText('Thank you. Your order has been received.');
         console.log('Thank you message existed');
-    }
-
-    async verifySalePriceDisplay(): Promise<boolean> {
-        const hasSalePrice = await this.productAction.salePrice.isVisible();
-        if (!hasSalePrice) {
-            console.log('Sale price is not displayed');
-            return false;
-        }
-
-        const hasOriginalPrice = await this.productAction.originalPrice.isVisible();
-        if (!hasOriginalPrice) {
-            console.log('Original price with strikethrough is not displayed');
-            return false;
-        }
-
-        const originalPriceText = await this.productAction.originalPrice.textContent();
-        const salePriceText = await this.productAction.salePrice.textContent();
-
-        if (!originalPriceText || !salePriceText) {
-            console.log('Cannot get price text content');
-            return false;
-        }
-        console.log(`Original price: ${originalPriceText}`);
-        console.log(`Sale price: ${salePriceText}`);
-        const originalPriceValue = parseFloat(originalPriceText.replace(/[^\d.]/g, ''));
-        const salePriceValue = parseFloat(salePriceText.replace(/[^\d.]/g, ''));
-        if (salePriceValue >= originalPriceValue) {
-            console.log(`Sale price (${salePriceValue}) is not less than original price (${originalPriceValue})`);
-            return false;
-        }
-
-        console.log(`Sale price (${salePriceValue}) is correctly less than original price (${originalPriceValue})`);
-        return true;
     }
 
     async verifyProductDisplayCorrectly(expectedTitle: string, expectedPrice: number): Promise<void> {

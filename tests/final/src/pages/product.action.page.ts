@@ -36,10 +36,6 @@ export class ProductActionPage extends ProductPage {
         return super.getCategory();
     }
 
-    public async getTag(): Promise<string> {
-        return super.getTag();
-    }
-
     public async getQuantity(): Promise<string> {
         return super.getQuantity();
     }

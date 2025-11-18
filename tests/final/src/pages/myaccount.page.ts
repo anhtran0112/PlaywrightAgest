@@ -76,7 +76,7 @@ export class MyAccountPage {
         //Cho password validation
         await this.registerPasswordInput.press('Tab');
         await this.page.waitForSelector('.woocommerce-password-strength', { state: 'visible' });
-        await this.page.waitForTimeout(500);
+        await this.page.waitForTimeout(100);
         await this.registerButton.click();
         console.log(`Registered with email: ${generatedEmail}`);
         return generatedEmail;
