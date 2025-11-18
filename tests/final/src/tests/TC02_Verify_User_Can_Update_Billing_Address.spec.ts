@@ -37,16 +37,16 @@ test.describe('Complete product purchase flow', () => {
     test('Complete product purchase flow using Action Pages', async () => {
         await test.step('Step 1: Navigate to My Account -> Addresses', async () => {
             await homePage.goToMyAccountPage();
-            await myAccountPage.addressesLink.click();
+            await myAccountPage.clickAddressesLink();
         });
 
         await test.step('Step 2: Click "Edit" button for Billing Address', async () => {
-            await myAccountPage.editBillingAddressLink.click();
+            await myAccountPage.clickEditBillingAddressLink();
         });
 
         await test.step('Step 3: Fill billing information and save address', async () => {
             await cartPage.fillBillingInfo(BillingTestData.valid);
-            await myAccountPage.saveAddressButton.click();
+            await myAccountPage.clickSaveAddressButton();
         });
 
         await test.step('Step 4: Verify Message displays “Address changed successfully', async () => {

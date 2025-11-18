@@ -14,9 +14,17 @@ export class MyAccountActions extends MyAccountPage {
     public async loginUser(username: string, password: string, rememberMe: boolean = false): Promise<void> {
         await this.loginWithCredentials(username, password, rememberMe);
     }
-    
+
     public async clickAddressesLink(): Promise<void> {
         await super.clickAddressesLink();
+    }
+
+    public async clickEditBillingAddressLink(): Promise<void> {
+        await super.clickEditBillingAddressLink();
+    }
+
+    public async clickSaveAddressButton(): Promise<void> {
+        await super.clickSaveAddressButton();
     }
 
 }

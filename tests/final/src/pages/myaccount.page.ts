@@ -54,6 +54,14 @@ export class MyAccountPage {
         await this.addressesLink.click();
     }
 
+    protected async clickEditBillingAddressLink(): Promise<void> {
+        await this.editBillingAddressLink.click();
+    }
+
+    protected async clickSaveAddressButton(): Promise<void> {
+        await this.saveAddressButton.click();
+    }
+
     generateRandomEmail(): string {
         const emailTemplate = this.loginData.logindata.emailTemplate;
         const timestamp = Date.now();
