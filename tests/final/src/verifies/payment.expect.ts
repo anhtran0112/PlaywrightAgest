@@ -131,44 +131,27 @@ export class PaymentExpect {
         return true;
     }
 
-    async verifyProductDisplayCorrectly(expectedTitle: string, expectedPrice: number): Promise<boolean> {
+    async verifyProductDisplayCorrectly(expectedTitle: string, expectedPrice: number): Promise<void> {
         // Verify product title
-        const actualTitle = await this.productAction.productTitle.textContent();
-        if (actualTitle?.trim() !== expectedTitle) {
-            console.log(`Title mismatch. Expected: "${expectedTitle}", Actual: "${actualTitle}"`);
-            return false;
-        }
+        await expect(this.productAction.productTitle).toBeVisible();
+        await expect(this.productAction.productTitle).toHaveText(expectedTitle);
         console.log(`Product title is correct: "${expectedTitle}"`);
 
         // Verify product price
+        await expect(this.productAction.productPrice).toBeVisible();
         const actualPriceText = await this.productAction.productPrice.textContent();
-        if (!actualPriceText) {
-            console.log('Price element not found or empty');
-            return false;
-        }
-        const actualPriceValue = parseFloat(actualPriceText.replace(/[^\d.]/g, ''));
-        if (actualPriceValue !== expectedPrice) {
-            console.log(`Price mismatch. Expected: ${expectedPrice}, Actual: ${actualPriceValue}`);
-            return false;
-        }
+        const actualPriceValue = parseFloat(actualPriceText!.replace(/[^\d.]/g, ''));
+        expect(actualPriceValue).toBe(expectedPrice);
         console.log(`Product price is correct: ${expectedPrice}`);
 
         // Verify quantity = 1
-        const quantityValue = await this.productAction.quantityInputLocator.getAttribute('value');
-        if (quantityValue !== '1') {
-            console.log(`✗ Quantity mismatch. Expected: "1", Actual: "${quantityValue}"`);
-            return false;
-        }
+        await expect(this.productAction.quantityInputLocator).toBeVisible();
+        await expect(this.productAction.quantityInputLocator).toHaveValue('1');
         console.log('Quantity is correct: 1');
 
         // Verify Add to Basket button is visible
-        const isAddToCartVisible = await this.productAction.addToCartButton.isVisible();
-        if (!isAddToCartVisible) {
-            console.log('Add to Basket button is not visible');
-            return false;
-        }
+        await expect(this.productAction.addToCartButton).toBeVisible();
         console.log('Add to Basket button is visible');
         console.log('Product displayed correctly with all verified elements');
-        return true;
     }
 }

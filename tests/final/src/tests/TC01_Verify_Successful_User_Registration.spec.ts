@@ -27,7 +27,7 @@ test('Complete product purchase flow using Action Pages', async ({ page }) => {
     });
 
     await test.step('Step 4: Click on Home link in the breadcrumb', async () => {
-        await homePage.goToHomePage();
+        await homePage.clickHomeMenu();
     });
 
     await test.step('Step 5: Verify Home page contains only Three Arrivals', async () => {

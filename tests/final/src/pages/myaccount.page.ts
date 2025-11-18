@@ -23,7 +23,7 @@ export class MyAccountPage {
     readonly editBillingAddressLink: Locator;
     readonly saveAddressButton: Locator;
     readonly saveAddressChangeSuccessMessage: Locator;
-    
+
     constructor(page: Page) {
         this.page = page;
         this.loginData = DataLoader.loadLoginData();
@@ -38,8 +38,6 @@ export class MyAccountPage {
         this.passwordStrength = page.locator('.woocommerce-password-strength');
         this.registerButton = page.getByRole('button', { name: 'Register' })
         this.myAccountContent = page.locator('.woocommerce-MyAccount-content');
-
-
         //this.addressesLink = page.locator('.woocommerce-MyAccount-navigation-link--edit-address a');
         this.addressesLink = page.getByRole('link', { name: 'Addresses', exact: true });
         //this.editBillingAddressLink = page.getByRole('link', { name: 'Edit', exact: true });
@@ -50,6 +48,10 @@ export class MyAccountPage {
 
     protected async goToLostPassword(): Promise<void> {
         await this.lostPasswordLink.click();
+    }
+
+    protected async clickAddressesLink(): Promise<void> {
+        await this.addressesLink.click();
     }
 
     generateRandomEmail(): string {

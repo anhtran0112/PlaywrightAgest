@@ -61,16 +61,14 @@ export class BasePageExpect extends BasePage {
         expect(foundMatch).toBe(true);
     }
 
-    async verifyThreeArrivalsExistOnHomePage(): Promise<boolean> {
+    async verifyThreeArrivalsExistOnHomePage(): Promise<void> {
         const productItems = this.page.locator('.products li.product');
-        const itemCount = await productItems.count();
-        console.log(`Found ${itemCount} product items in new arrivals section`);
         // Verify có đúng 3 items
-        if (itemCount !== 3) {
-            console.log(`Expected 3 arrivals, but found ${itemCount}`);
-            return false;
+        await expect(productItems).toHaveCount(3);
+        // Verify tất cả items đều visible
+        for (let i = 0; i < 3; i++) {
+            await expect(productItems.nth(i)).toBeVisible();
         }
-        console.log('All 3 arrivals exist on homepage');
-        return true;
+        console.log('Verified: Exactly 3 arrivals exist on homepage and all are visible');
     }
 }

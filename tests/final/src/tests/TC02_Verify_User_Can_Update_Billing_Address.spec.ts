@@ -54,7 +54,7 @@ test.describe('Complete product purchase flow', () => {
         });
 
         await test.step('Step 5: Click "Addressed" link in the left-hand side menu', async () => {
-            await myAccountPage.addressesLink.click();
+            await myAccountPage.clickAddressesLink();
         });
 
         await test.step('Step 6: Verify Billing Address is displayed {First Name} {Last Name} {Address} {Town / City} {Postcode / ZIP} {State / County}', async () => {
